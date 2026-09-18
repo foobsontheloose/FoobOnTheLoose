@@ -1319,6 +1319,68 @@
 
   .handle:hover { background: var(--ink); }
 
+  /* Site map: grouped by what someone is trying to do rather than mirroring
+     the tile order, since "facing surgery" and "know your normal" are very
+     different errands. */
+  .sitemap {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 20px;
+    max-width: 860px;
+    margin: 0 auto 34px;
+    padding: 30px 4px 0;
+    border-top: 1px solid var(--petal);
+    text-align: left;
+  }
+
+  .sitemap-title {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--rose-deep);
+    margin: 0 0 10px;
+  }
+
+  .sitemap ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .sitemap-link {
+    display: inline-block;
+    background: none;
+    border: none;
+    padding: 2px 0;
+    margin: 0;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #7A5560;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+
+  .sitemap-link:hover,
+  .sitemap-link:focus-visible { color: var(--rose-deep); }
+
+  @media (min-width: 700px) {
+    .sitemap {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0 24px;
+      padding-top: 36px;
+    }
+    .sitemap-link { font-size: 0.95rem; }
+  }
+
   footer {
     text-align: center;
     padding: 28px 22px 34px;
@@ -2402,6 +2464,40 @@
   </button>
 
   <footer>
+    <nav class="sitemap" aria-label="All sections">
+      <div class="sitemap-col">
+        <h2 class="sitemap-title">Start here</h2>
+        <ul>
+          <li><a class="sitemap-link" href="#howto">How to do a self-exam</a></li>
+          <li><button type="button" class="sitemap-link" data-cal>Set your monthly reminder</button></li>
+        </ul>
+      </div>
+      <div class="sitemap-col">
+        <h2 class="sitemap-title">Understand</h2>
+        <ul>
+          <li><button type="button" class="sitemap-link" data-panel="panel-why">Why it matters</button></li>
+          <li><button type="button" class="sitemap-link" data-panel="panel-signs">Know the signs</button></li>
+          <li><button type="button" class="sitemap-link" data-panel="panel-screening">Screening &amp; mammograms</button></li>
+          <li><button type="button" class="sitemap-link" data-panel="panel-men">Men get it too</button></li>
+        </ul>
+      </div>
+      <div class="sitemap-col">
+        <h2 class="sitemap-title">Facing surgery</h2>
+        <ul>
+          <li><button type="button" class="sitemap-link" data-panel="panel-recon">Reconstruction options</button></li>
+          <li><button type="button" class="sitemap-link" data-panel="panel-questions">Questions to ask</button></li>
+        </ul>
+      </div>
+      <div class="sitemap-col">
+        <h2 class="sitemap-title">More</h2>
+        <ul>
+          <li><button type="button" class="sitemap-link" data-panel="panel-support">Support &amp; resources</button></li>
+          <li><button type="button" class="sitemap-link" data-panel="panel-about">Our story</button></li>
+          <li><button type="button" class="sitemap-link" data-panel="panel-follow">Follow along</button></li>
+        </ul>
+      </div>
+    </nav>
+
     <p class="footer-brand">Foobs On the Loose · foobsontheloose.com</p>
     <p class="footer-legal">&copy; <span id="year">2026</span> Foobs On the Loose. Foobie&trade;, the name and the artwork are ours.<br>The breast health information is free to share and reproduce &mdash; that's the whole point.</p>
   </footer>
@@ -2686,6 +2782,10 @@
       }
 
       if (btn) btn.addEventListener('click', openCal);
+      // anything marked data-cal opens the reminder chooser as well
+      document.querySelectorAll('[data-cal]').forEach(function (el) {
+        el.addEventListener('click', openCal);
+      });
       if (calClose) calClose.addEventListener('click', closeCal);
 
       // When the .ics opens in Calendar (or Google Calendar opens in a new tab)
