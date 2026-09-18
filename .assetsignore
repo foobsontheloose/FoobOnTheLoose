@@ -1,13 +1,40 @@
-# Files kept in the repo but not served to visitors.
-# The page only loads images/bouquet.webp and images/trail.webp; everything
-# else in images/ is source material or a master the site never requests.
+# Files kept in the repo but never sent to visitors.
+#
+# Named explicitly rather than by wildcard. An earlier "images/*.JPG" here was
+# matched case-insensitively and silently excluded all seventeen lowercase
+# .jpg diagrams, so every reconstruction page rendered a broken image on the
+# deployed site while working perfectly in local preview.
+#
+# The page requests 21 files from images/: the six .webp and fifteen .jpg
+# listed nowhere below. Everything below is source material or a working
+# master that nothing on the page links to.
+
 build-trail.py
 wrangler.jsonc
 .assetsignore
-images/*.png
-images/*.jpeg
-images/*.JPG
-
-# Local-only clutter, belt and braces in case it ever gets committed.
 .DS_Store
 .claude/*
+
+# Original reconstruction diagrams, superseded by the recon-*.jpg exports
+images/ComboHybrid.png
+images/DIEP.png
+images/Direct.png
+images/FatGrafting.png
+images/FlatClosure.png
+images/IGAP.png
+images/LAT.png
+images/NippleAreola.png
+images/PAP.png
+images/SGAP.png
+images/TEtoIMPLANT.png
+images/TUG.png
+
+# Watercolour source art and the full-size masters the trail is built from
+images/IMG_0502.JPG
+images/bouquet.png
+images/trail.png
+images/flowerstransparent.png
+images/ribbon.jpeg
+images/ribbonlines.png
+images/ribbons.png
+images/watercolor flowers.jpeg
