@@ -1,0 +1,13 @@
+# Files kept in the repo but not served to visitors.
+# The page only loads images/bouquet.webp and images/trail.webp; everything
+# else in images/ is source material or a master the site never requests.
+build-trail.py
+wrangler.jsonc
+.assetsignore
+images/*.png
+images/*.jpeg
+images/*.JPG
+
+# Local-only clutter, belt and braces in case it ever gets committed.
+.DS_Store
+.claude/*
