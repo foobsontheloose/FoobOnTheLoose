@@ -133,43 +133,31 @@
   /* Side trails: a ribbon streamer threaded with mixed blooms, running on
      down from the corner bouquets. The mask fades both ends, so the trail
      emerges and disappears rather than starting and stopping. */
+  /* One continuous garland down the whole page. Every section stretches the
+     same strip to its own height and crops it, but each starts further down
+     the strip than the last - so the flowers carry on thinning rather than
+     restarting dense at each section boundary, which is what read as a
+     page break. */
   .trail {
     position: absolute;
     pointer-events: none;
     z-index: 0;
     width: clamp(88px, 21vw, 215px);
-    aspect-ratio: 380 / 2600;
-    height: auto;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 42%, rgba(0, 0, 0, 0.35) 72%, transparent 95%);
-    mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 42%, rgba(0, 0, 0, 0.35) 72%, transparent 95%);
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
     filter: blur(var(--trail-blur, 0.7px)) saturate(var(--trail-sat, 0.7));
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.55) 82%, transparent 99%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.55) 82%, transparent 99%);
   }
 
-  /* The hero trails begin underneath the corner flowers rather than below
-     them, so the two read as one arrangement. Their top is dense and at
-     near-full strength to match the corner, and the fade happens down the
-     length instead of at the join. */
+  /* Hero: the dense top of the strip, tucked under the corner flowers and at
+     near-full strength so there is no step down at the join. */
   .trail--l,
   .trail--r {
     opacity: 0.86;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 13%, rgba(0, 0, 0, 0.74) 33%, rgba(0, 0, 0, 0.44) 58%, rgba(0, 0, 0, 0.2) 80%, transparent 96%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 13%, rgba(0, 0, 0, 0.74) 33%, rgba(0, 0, 0, 0.44) 58%, rgba(0, 0, 0, 0.2) 80%, transparent 96%);
-  }
-
-  /* The hero varies a lot in height between phone and desktop, so these two
-     stretch to fill it rather than taking their height from the image's
-     proportions. object-fit crops the strip's width instead of squashing it,
-     which keeps the flowers their proper shape and guarantees the trail
-     reaches the bottom of the hero at any screen size. */
-  .trail--l,
-  .trail--r {
-    /* 100% of the hero, not of the image's own proportions. An <img> with
-       height:auto ignores a bottom offset and uses its intrinsic height, so
-       this has to be explicit. The hero clips the overhang. */
-    height: 100%;
-    aspect-ratio: auto;
-    object-fit: cover;
-    object-position: center top;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 34%, rgba(0, 0, 0, 0.72) 62%, rgba(0, 0, 0, 0.4) 84%, rgba(0, 0, 0, 0.22) 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 34%, rgba(0, 0, 0, 0.72) 62%, rgba(0, 0, 0, 0.4) 84%, rgba(0, 0, 0, 0.22) 100%);
   }
 
   .trail--l {
@@ -182,22 +170,21 @@
     transform: scaleX(-1);
   }
 
-  /* Carrying on past the tiles, dimmer again. */
-  .trail--tabs-l {
-    top: -12%;
-    left: -34px;
-    opacity: 0.26;
-    --trail-blur: 1.2px;
-    --trail-sat: 0.58;
-  }
+  /* Tiles: picks up partway down the strip, where it has already thinned, so
+     it continues the hero rather than starting over. */
+  .trail--tabs-l,
   .trail--tabs-r {
-    top: 6%;
-    right: -34px;
-    transform: scaleX(-1);
-    opacity: 0.26;
-    --trail-blur: 1.2px;
-    --trail-sat: 0.58;
+    top: 0;
+    opacity: 0.3;
+    object-position: center 42%;
+    --trail-blur: 1.1px;
+    --trail-sat: 0.6;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 55%, rgba(0, 0, 0, 0.3) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 55%, rgba(0, 0, 0, 0.3) 100%);
   }
+
+  .trail--tabs-l { left: -34px; }
+  .trail--tabs-r { right: -34px; transform: scaleX(-1); }
 
   .petal--tabs-l {
     top: 2%;
@@ -216,25 +203,21 @@
     --petal-sat: 0.58;
   }
 
-  /* Self-exam section — barely there. */
-  /* Self-exam section: the faintest point of the fade. Present enough to
-     keep the page feeling of a piece, nowhere near enough to compete with
-     the instructions. */
-  .trail--howto-l {
-    top: 3%;
-    left: -46px;
-    opacity: 0.17;
-    --trail-blur: 1.6px;
-    --trail-sat: 0.52;
-  }
+  /* Self-exam section: the sparse tail of the strip, the faintest point of
+     the whole page. Present, but never competing with the instructions. */
+  .trail--howto-l,
   .trail--howto-r {
-    top: 38%;
-    right: -46px;
-    transform: scaleX(-1);
-    opacity: 0.17;
-    --trail-blur: 1.6px;
-    --trail-sat: 0.52;
+    top: 0;
+    opacity: 0.16;
+    object-position: center 78%;
+    --trail-blur: 1.5px;
+    --trail-sat: 0.55;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.45) 50%, transparent 96%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.45) 50%, transparent 96%);
   }
+
+  .trail--howto-l { left: -46px; }
+  .trail--howto-r { right: -46px; transform: scaleX(-1); }
 
   .mascot-row {
     position: relative;
