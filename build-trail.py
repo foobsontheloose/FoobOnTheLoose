@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFilter, ImageChops
 import os
 
-ART = "/Users/nickymurphy/Desktop/FoobOnTheLoose/art"
+ART = "/Users/nickymurphy/Desktop/FoobOnTheLoose/images"
 master = Image.open(os.path.join(ART, "bouquet.png")).convert("RGBA")
 
 
