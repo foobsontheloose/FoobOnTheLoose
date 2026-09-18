@@ -732,6 +732,82 @@
     border-radius: 16px;
   }
 
+  /* A wall of snapshots rather than a grid: columns give a masonry flow that
+     copes with photos of differing heights, and each sits at a slight angle
+     with a white border so it reads as a photograph on a table. */
+  .photo-wall {
+    columns: 2;
+    column-gap: 14px;
+    margin: 26px auto 8px;
+    max-width: 760px;
+  }
+
+  .wall-shot {
+    display: block;
+    width: 100%;
+    break-inside: avoid;
+    margin: 0 0 16px;
+    padding: 7px 7px 9px;
+    border: none;
+    border-radius: 3px;
+    background: #fff;
+    cursor: zoom-in;
+    box-shadow: 0 5px 16px -6px rgba(92, 58, 69, 0.45);
+    transform: rotate(var(--tilt, 0deg));
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+  }
+
+  .wall-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1px;
+  }
+
+  .wall-shot:hover,
+  .wall-shot:focus-visible {
+    transform: rotate(0deg) scale(1.03);
+    box-shadow: 0 10px 26px -8px rgba(92, 58, 69, 0.5);
+    z-index: 2;
+    position: relative;
+  }
+
+  @media (min-width: 700px) {
+    .photo-wall { columns: 3; column-gap: 16px; }
+  }
+
+  /* Tap one and it fills the screen, above everything else. */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background: rgba(48, 28, 36, 0.82);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0.22s ease;
+    cursor: zoom-out;
+    border: none;
+  }
+
+  .lightbox.open { opacity: 1; visibility: visible; }
+
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 6px;
+    box-shadow: 0 18px 50px -12px rgba(0, 0, 0, 0.6);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wall-shot { transition: none; }
+  }
+
   .about-close {
     font-family: 'Fraunces', serif;
     font-style: italic;
@@ -2250,6 +2326,58 @@
 
           <p class="about-body">Together, we’re here to <strong>educate, empower, support, and remind you to know your body and use your voice.</strong></p>
 
+
+          <div class="photo-wall">
+              <button type="button" class="wall-shot" style="--tilt: -2.4deg" aria-label="Enlarge photo 1 of 16">
+                <img src="images/photo-01.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: 1.8deg" aria-label="Enlarge photo 2 of 16">
+                <img src="images/photo-02.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: -1.2deg" aria-label="Enlarge photo 3 of 16">
+                <img src="images/photo-03.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: 2.6deg" aria-label="Enlarge photo 4 of 16">
+                <img src="images/photo-04.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: -1.9deg" aria-label="Enlarge photo 5 of 16">
+                <img src="images/photo-05.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: 1.1deg" aria-label="Enlarge photo 6 of 16">
+                <img src="images/photo-06.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: -2.8deg" aria-label="Enlarge photo 7 of 16">
+                <img src="images/photo-07.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: 2.0deg" aria-label="Enlarge photo 8 of 16">
+                <img src="images/photo-08.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: -1.5deg" aria-label="Enlarge photo 9 of 16">
+                <img src="images/photo-09.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: 2.3deg" aria-label="Enlarge photo 10 of 16">
+                <img src="images/photo-10.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: -2.1deg" aria-label="Enlarge photo 11 of 16">
+                <img src="images/photo-11.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: 1.4deg" aria-label="Enlarge photo 12 of 16">
+                <img src="images/photo-12.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: -2.6deg" aria-label="Enlarge photo 13 of 16">
+                <img src="images/photo-13.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: 1.7deg" aria-label="Enlarge photo 14 of 16">
+                <img src="images/photo-14.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: -1.3deg" aria-label="Enlarge photo 15 of 16">
+                <img src="images/photo-15.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+              <button type="button" class="wall-shot" style="--tilt: 2.2deg" aria-label="Enlarge photo 16 of 16">
+                <img src="images/photo-16.webp" alt="" loading="lazy" decoding="async" width="900" height="1200" />
+              </button>
+          </div>
+
           <p class="about-close">Different bodies. Different choices. Different journeys.<br><span>All real. 💗</span></p>
         </div>
 
@@ -2264,6 +2392,10 @@
       </div>
     </div>
   </div>
+
+  <button type="button" class="lightbox" id="lightbox" aria-label="Close photo">
+    <img id="lightbox-img" src="" alt="" />
+  </button>
 
   <button type="button" class="page-cue" id="page-cue" aria-label="Scroll down">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2397,6 +2529,34 @@
           closeModal();
         }
       }
+    })();
+
+    /* Photo wall: tap a snapshot to see it full size */
+    (function () {
+      var box = document.getElementById('lightbox');
+      var img = document.getElementById('lightbox-img');
+      if (!box || !img) return;
+      var lastFocused = null;
+
+      document.querySelectorAll('.wall-shot').forEach(function (shot) {
+        shot.addEventListener('click', function () {
+          lastFocused = shot;
+          img.src = shot.querySelector('img').src;
+          box.classList.add('open');
+        });
+      });
+
+      function close() {
+        box.classList.remove('open');
+        // release the full-size image so it is not held in memory
+        setTimeout(function () { if (!box.classList.contains('open')) img.src = ''; }, 300);
+        if (lastFocused) lastFocused.focus();
+      }
+
+      box.addEventListener('click', close);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && box.classList.contains('open')) close();
+      });
     })();
 
     /* Page scroll cue: same control, same behaviour, for the page itself */

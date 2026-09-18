@@ -42,3 +42,12 @@ images/watercolor flowers.jpeg
 # Pristine diagram the areola edit is generated from, plus its script
 images/recon-flatclosure-base.jpg
 images/add-areolae.py
+
+# Camera originals: the wall serves the optimised photo-NN.webp files
+images/*_1_105_c.jpeg
+images/*_1_105_c 2.jpeg
+images/*_4_5005_c.jpeg
+images/*_1_201_a.heic
+images/*_1_105_c.jpeg
+images/_converted_heic.jpeg
+images/*_1_105_c 2.jpeg
