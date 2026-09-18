@@ -154,8 +154,11 @@
     object-fit: cover;
     object-position: center top;
     filter: blur(var(--trail-blur, 0.7px)) saturate(var(--trail-sat, 0.7));
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.55) 82%, transparent 99%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.55) 82%, transparent 99%);
+    --trail-edge: linear-gradient(to right, #000 0%, #000 44%, rgba(0, 0, 0, 0.72) 68%, rgba(0, 0, 0, 0.3) 87%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.55) 82%, transparent 99%), var(--trail-edge);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.55) 82%, transparent 99%), var(--trail-edge);
   }
 
   /* Hero: the dense top of the strip, tucked under the corner flowers and at
@@ -165,8 +168,8 @@
     opacity: 0.86;
     /* Reaches zero before the hero's bottom edge, so there is nothing left
        for the clip to cut through. */
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 30%, rgba(0, 0, 0, 0.7) 58%, rgba(0, 0, 0, 0.34) 80%, transparent 97%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 30%, rgba(0, 0, 0, 0.7) 58%, rgba(0, 0, 0, 0.34) 80%, transparent 97%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 30%, rgba(0, 0, 0, 0.7) 58%, rgba(0, 0, 0, 0.34) 80%, transparent 97%), var(--trail-edge);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 30%, rgba(0, 0, 0, 0.7) 58%, rgba(0, 0, 0, 0.34) 80%, transparent 97%), var(--trail-edge);
   }
 
   .trail--l {
@@ -192,8 +195,8 @@
     object-position: center 38%;
     --trail-blur: 1.1px;
     --trail-sat: 0.6;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 16%, rgba(0, 0, 0, 0.85) 38%, rgba(0, 0, 0, 0.6) 72%, rgba(0, 0, 0, 0.32) 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 16%, rgba(0, 0, 0, 0.85) 38%, rgba(0, 0, 0, 0.6) 72%, rgba(0, 0, 0, 0.32) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 16%, rgba(0, 0, 0, 0.85) 38%, rgba(0, 0, 0, 0.6) 72%, rgba(0, 0, 0, 0.32) 100%), var(--trail-edge);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 16%, rgba(0, 0, 0, 0.85) 38%, rgba(0, 0, 0, 0.6) 72%, rgba(0, 0, 0, 0.32) 100%), var(--trail-edge);
   }
 
   .trail--tabs-l { left: -34px; }
@@ -226,8 +229,8 @@
     object-position: center 74%;
     --trail-blur: 1.5px;
     --trail-sat: 0.55;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 14%, rgba(0, 0, 0, 0.7) 32%, rgba(0, 0, 0, 0.4) 62%, transparent 94%);
-    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 14%, rgba(0, 0, 0, 0.7) 32%, rgba(0, 0, 0, 0.4) 62%, transparent 94%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 14%, rgba(0, 0, 0, 0.7) 32%, rgba(0, 0, 0, 0.4) 62%, transparent 94%), var(--trail-edge);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 14%, rgba(0, 0, 0, 0.7) 32%, rgba(0, 0, 0, 0.4) 62%, transparent 94%), var(--trail-edge);
   }
 
   .trail--howto-l { left: -46px; }
@@ -1293,10 +1296,20 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(252, 232, 234, 0.94);
-    -webkit-backdrop-filter: none;
-    border-bottom: 1.5px solid var(--rose);
+    /* No rule underneath: the bar's tint simply runs out. The last third is a
+       gradient to fully transparent, so the page emerges from it rather than
+       starting at a line. */
+    background: linear-gradient(
+      to bottom,
+      rgba(252, 232, 234, 0.97) 0%,
+      rgba(252, 232, 234, 0.95) 52%,
+      rgba(252, 233, 235, 0.72) 76%,
+      rgba(251, 243, 242, 0.34) 90%,
+      rgba(251, 243, 242, 0) 100%
+    );
+    border-bottom: none;
     box-shadow: none;
+    padding-bottom: 12px;
   }
 
   .ribbon-inner {
@@ -1330,12 +1343,12 @@
     border: none;
     cursor: pointer;
     font-family: 'Nunito Sans', sans-serif;
-    font-weight: 700;
-    font-size: 0.82rem;
-    letter-spacing: 0.02em;
-    color: #7A5560;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 0.005em;
+    color: var(--ink);
     text-decoration: none;
-    padding: 9px 9px;
+    padding: 11px 10px 9px;
     white-space: nowrap;
     border-bottom: 2px solid transparent;
     transition: color 0.15s ease, border-color 0.15s ease;
@@ -1347,11 +1360,11 @@
   }
 
   /* stop the sticky bar covering a heading it scrolls to */
-  #howto { scroll-margin-top: 52px; }
+  #howto { scroll-margin-top: 64px; }
 
   @media (min-width: 700px) {
     .ribbon-inner { justify-content: center; gap: 8px; padding: 0 24px; }
-    .ribbon-link { font-size: 0.86rem; padding: 11px 13px; }
+    .ribbon-link { font-size: 0.98rem; padding: 13px 14px 11px; }
     .ribbon-mark { width: 15px; height: 18px; margin-right: 10px; }
   }
 
