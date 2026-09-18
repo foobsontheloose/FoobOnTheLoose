@@ -690,6 +690,70 @@
     .page-cue { animation: none; }
   }
 
+  /* The story tile runs the full width of the grid: it is the one entry that
+     is about a person rather than a topic, and nine tiles would otherwise
+     leave an orphan on the end of the row. */
+  .tab-square--wide {
+    grid-column: 1 / -1;
+    aspect-ratio: auto;
+    flex-direction: row;
+    gap: 14px;
+    padding: 18px 20px;
+    background: linear-gradient(120deg, var(--petal) 0%, var(--petal-soft) 62%);
+    border-color: rgba(201, 106, 133, 0.28);
+  }
+
+  .tab-square--wide .tab-label { font-size: 1rem; }
+
+  /* Her writing, given room to breathe. */
+  .about-body {
+    font-size: 0.99rem;
+    line-height: 1.72;
+    color: #4B3540;
+    max-width: 68ch;
+    margin: 0 auto 16px;
+  }
+
+  .about-body strong { color: var(--rose-deep); font-weight: 800; }
+
+  /* Four short lines whose rhythm is the point, so they stay as four lines. */
+  .about-beats {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.12rem;
+    line-height: 1.85;
+    color: var(--rose-deep);
+    text-align: center;
+    max-width: 68ch;
+    margin: 22px auto;
+    padding: 18px 20px;
+    background: var(--petal-soft);
+    border-radius: 16px;
+  }
+
+  .about-close {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.16rem;
+    line-height: 1.5;
+    color: var(--ink);
+    text-align: center;
+    max-width: 68ch;
+    margin: 26px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--petal);
+  }
+
+  .about-close span { color: var(--rose-deep); }
+
+  @media (min-width: 700px) {
+    .about-body { font-size: 1.04rem; }
+    .about-beats { font-size: 1.3rem; }
+    .about-close { font-size: 1.35rem; }
+  }
+
   .tab-panel h2 {
     font-family: 'Fraunces', serif;
     font-weight: 600;
@@ -1665,6 +1729,12 @@
           </span>
           <span class="tab-label">Follow along</span>
         </button>
+        <button class="tab-square tab-square--wide" data-panel="panel-about">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 20.5s-6.8-4.1-9-8C1.2 8.6 3 5.5 6.2 5.5c1.9 0 3.4 1.1 4.4 2.5h2.8c1-1.4 2.5-2.5 4.4-2.5 3.2 0 5 3.1 3.2 7-2.2 3.9-9 8-9 8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.6 12.4c.9-1.5 1.7-1.5 2.4 0 .7 1.5 1.5 1.5 2.4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="tab-label">Our story</span>
+        </button>
       </div>
     </div>
   </section>
@@ -2134,6 +2204,53 @@
 
           <p class="signs-note">Say it out loud when you call. Cost and transport are among the most common reasons people delay screening, and every organisation here exists partly to remove that barrier. Asking is normal.</p>
           <p class="recon-src">Phone numbers, hours and eligibility verified against each organisation's own site. Programmes and funding do change — if you find something out of date, please tell us so we can fix it.</p>
+        </div>
+
+        <div class="tab-panel" id="panel-about" hidden>
+          <h2>About me</h2>
+
+          <p class="recon-lede">Hi, I’m Nicky, the creator of <strong>Foobs On The Loose</strong> and the slightly unhinged mind behind <strong>Foobie</strong>. 💗</p>
+
+          <p class="about-body">I’ve spent nearly 30 years working in healthcare, but nothing really prepares you for becoming the patient.</p>
+
+          <p class="about-body">Breast health has been personal to me for a long time. My mom is a <strong>three-time cancer survivor who was first diagnosed with breast cancer at just 42 years old</strong>. Her journey included multiple complications and a failed reconstruction, and at the time, remaining flat was her only option. She now wears prosthetics as a flattie. Watching her go through all of that shaped the way I understood cancer, early detection, advocacy, and the importance of paying attention to your body long before I ever had a breast health journey of my own.</p>
+
+          <p class="about-body">After being diagnosed with <strong>atypical lobular hyperplasia (ALH)</strong> and a <strong>PASH tumor</strong>, I made the very personal decision to have a <strong>prophylactic bilateral mastectomy in 2023</strong>.</p>
+
+          <p class="about-body">What I expected to be a difficult but fairly straightforward reconstruction became a much longer journey. I dealt with flap necrosis, a rare infection, months of antibiotics, multiple surgeries, setbacks, scars, and <strong>a whole lot of tears and fear along the way</strong>.</p>
+
+          <p class="about-body">Through all of it, I was incredibly lucky to have an amazing surgeon beside me. Her skill, honesty, patience, and support made an enormous difference during some of the hardest parts of my journey.</p>
+
+          <h3 class="recon-group-title">Why I created Foobs On The Loose</h3>
+
+          <p class="about-body">I created <strong>Foobs On The Loose</strong> because I wanted breast health education to feel a little more human.</p>
+
+          <p class="about-body">There is plenty of serious information out there, but sometimes it is buried in medical language, fear, or sterile pamphlets that do not really prepare you for the reality of being the person living through it.</p>
+
+          <p class="about-body">This page is about <strong>knowing your body, understanding your options, asking questions, advocating for yourself, and feeling less alone in the process</strong>.</p>
+
+          <p class="about-body">A big part of that is <strong>Feel It on the First</strong>, my monthly reminder to know your normal so you are more likely to notice when something changes.</p>
+
+          <p class="about-body">There will always be serious conversations here because breast health is serious. But there will also be humor, honesty, a little sass, and room to talk about the parts of the journey that are awkward, frustrating, ridiculous, or just plain hard.</p>
+
+          <h3 class="recon-group-title">Meet Foobie</h3>
+
+          <p class="about-body">Foobie was born during my reconstruction complications and quickly became the loud little voice of this page.</p>
+
+          <p class="about-beats">
+            She’s scarred.<br>
+            She’s reconstructed.<br>
+            She’s occasionally censored by social media.<br>
+            She has absolutely no intention of behaving.
+          </p>
+
+          <p class="about-body">And I wouldn’t have her any other way.</p>
+
+          <p class="about-body">She started as humor during a time when I desperately needed some, but she grew into something much bigger. Foobie represents the messy, funny, frustrating, empowering parts of breast surgery, reconstruction, body image, and healing that do not always make it into the medical pamphlets.</p>
+
+          <p class="about-body">Together, we’re here to <strong>educate, empower, support, and remind you to know your body and use your voice.</strong></p>
+
+          <p class="about-close">Different bodies. Different choices. Different journeys.<br><span>All real. 💗</span></p>
         </div>
 
         <div class="tab-panel" id="panel-follow" hidden>
