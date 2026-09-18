@@ -575,8 +575,8 @@
     padding: 34px 24px 28px;
     width: 100%;
     max-width: 520px;
-    max-height: 85vh;
-    max-height: 85dvh;
+    max-height: 88vh;
+    max-height: 88dvh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -616,6 +616,47 @@
   }
 
   .modal-close:hover { background: var(--petal); }
+
+  /* Tells you there is more below, and scrolls you there if you tap it.
+     Sticky rather than fixed, so it rides the bottom of the card's own
+     scroll area without needing to know the card's size. Hidden once you
+     reach the end, and still without the bob for reduced-motion users. */
+  .scroll-cue {
+    position: sticky;
+    top: calc(88dvh - 96px);
+    float: right;
+    z-index: 3;
+    width: 40px;
+    height: 40px;
+    margin: 0 -4px -40px 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rose-deep);
+    background: rgba(252, 233, 236, 0.94);
+    box-shadow: 0 4px 14px -4px rgba(120, 70, 88, 0.42);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    animation: cue-bob 1.9s ease-in-out infinite;
+  }
+
+  .scroll-cue svg { width: 20px; height: 20px; display: block; }
+
+  .modal-card.has-more .scroll-cue { opacity: 1; visibility: visible; }
+
+  @keyframes cue-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue { animation: none; }
+  }
 
   .tab-panel h2 {
     font-family: 'Fraunces', serif;
@@ -950,6 +991,21 @@
     height: auto;
   }
 
+  /* The card is wide so the diagrams can breathe, but running text past
+     roughly 70 characters a line gets tiring, so the prose is held to a
+     comfortable measure and centred inside it. */
+  .recon-body,
+  .recon-lede,
+  .info-note,
+  .signs-note,
+  .band-note,
+  .recon-note,
+  .source-note {
+    max-width: 68ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .recon-body {
     margin: 0;
     color: #4B3540;
@@ -1192,7 +1248,7 @@
     .tabs-section { padding: 16px 24px 90px; }
     .tab-square:hover { transform: translateY(-4px); }
 
-    .modal-card { max-width: 820px; padding: 42px 56px 36px; }
+    .modal-card { max-width: 880px; padding: 42px 56px 36px; }
 
     /* use the extra width to cut height */
     .signs-list {
@@ -1674,6 +1730,9 @@
   <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true">
     <div class="modal-card">
       <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+      <button type="button" class="scroll-cue" id="scroll-cue" aria-label="Scroll down for more">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
       <div class="tab-panels">
 
         <div class="tab-panel" id="panel-why" hidden>
@@ -2116,6 +2175,25 @@
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
         card.scrollTop = 0;
+        requestAnimationFrame(updateCue);
+      }
+
+      // Show the cue only while something is still below the fold, and let a
+      // tap carry you down a screenful.
+      var cue = document.getElementById('scroll-cue');
+
+      function updateCue() {
+        if (!cue) return;
+        var moreBelow = card.scrollHeight - card.scrollTop - card.clientHeight > 24;
+        card.classList.toggle('has-more', moreBelow);
+      }
+
+      if (cue) {
+        card.addEventListener('scroll', updateCue, { passive: true });
+        window.addEventListener('resize', updateCue);
+        cue.addEventListener('click', function () {
+          card.scrollBy({ top: card.clientHeight * 0.82, behavior: 'smooth' });
+        });
       }
 
       function closeModal() {
