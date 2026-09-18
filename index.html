@@ -73,14 +73,6 @@
     overflow: hidden;
   }
 
-  /* The sprite only holds the artwork; it never renders on its own. */
-  .petal-sprite {
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-  }
-
   /* --- Decorative flowers ---------------------------------------------
      One <use> per flower, all referencing #floral-spray. --petal-w is set
      per breakpoint below, and each flower scales off it, so the whole
@@ -209,21 +201,23 @@
   }
 
   /* Self-exam section — barely there. */
-  .petal--howto-l {
-    top: 5%;
-    left: calc(var(--petal-inset) - 26px);
-    transform: scaleX(-1) rotate(8deg);
-    opacity: 0.15;
-    --petal-blur: 1.9px;
-    --petal-sat: 0.5;
+  /* Self-exam section: the faintest point of the fade. Present enough to
+     keep the page feeling of a piece, nowhere near enough to compete with
+     the instructions. */
+  .trail--howto-l {
+    top: 3%;
+    left: -46px;
+    opacity: 0.17;
+    --trail-blur: 1.6px;
+    --trail-sat: 0.52;
   }
-  .petal--howto-r {
-    top: 44%;
-    right: calc(var(--petal-inset) - 26px);
-    transform: rotate(-6deg);
-    opacity: 0.15;
-    --petal-blur: 1.9px;
-    --petal-sat: 0.5;
+  .trail--howto-r {
+    top: 38%;
+    right: -46px;
+    transform: scaleX(-1);
+    opacity: 0.17;
+    --trail-blur: 1.6px;
+    --trail-sat: 0.52;
   }
 
   .mascot-row {
@@ -1342,118 +1336,6 @@
 </style>
 </head>
 <body>
-<svg class="petal-sprite" aria-hidden="true" width="0" height="0">
-  <defs>
-        <radialGradient id="petMain" cx="30%" cy="22%" r="85%">
-          <stop offset="0%" stop-color="#FBF0F4"/><stop offset="45%" stop-color="#E4AEC6"/><stop offset="100%" stop-color="#A85E80"/>
-        </radialGradient>
-        <radialGradient id="petSecond" cx="30%" cy="22%" r="85%">
-          <stop offset="0%" stop-color="#F7E9EE"/><stop offset="50%" stop-color="#D79BB6"/><stop offset="100%" stop-color="#9C5674"/>
-        </radialGradient>
-        <radialGradient id="petThird" cx="30%" cy="22%" r="85%">
-          <stop offset="0%" stop-color="#FCF3F6"/><stop offset="55%" stop-color="#E9BDCE"/><stop offset="100%" stop-color="#B2718C"/>
-        </radialGradient>
-        <linearGradient id="stemMain" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#A3B48F"/><stop offset="100%" stop-color="#71805F"/>
-        </linearGradient>
-      </defs>
-  <g id="floral-spray">
-      <path d="M28 318 C 44 258, 62 208, 92 156 C 108 126, 126 100, 152 76" fill="none" stroke="url(#stemMain)" stroke-width="3" stroke-linecap="round"/>
-      <path d="M78 196 C 64 190, 50 194, 40 206" fill="none" stroke="url(#stemMain)" stroke-width="1.7" stroke-linecap="round"/>
-      <path d="M104 142 C 118 132, 134 130, 146 138" fill="none" stroke="url(#stemMain)" stroke-width="1.7" stroke-linecap="round"/>
-      <path d="M62 240 C 50 238, 40 244, 34 254" fill="none" stroke="url(#stemMain)" stroke-width="1.6" stroke-linecap="round"/>
-      <path d="M118 116 C 128 106, 140 100, 150 102" fill="none" stroke="url(#stemMain)" stroke-width="1.4" stroke-linecap="round"/>
-      <path d="M52 276 C 44 272, 34 274, 28 282" fill="none" stroke="url(#stemMain)" stroke-width="1.4" stroke-linecap="round"/>
-
-      <path d="M46 214 C 32 208, 18 214, 10 230 C 26 234, 40 228, 46 214 Z" fill="#8FA07C"/>
-      <path d="M86 188 C 98 176, 114 174, 126 184 C 114 194, 100 194, 86 188 Z" fill="#9BAE87"/>
-      <path d="M146 138 C 158 128, 172 128, 182 138 C 170 146, 156 146, 146 138 Z" fill="#8FA07C"/>
-      <path d="M36 258 C 24 254, 14 260, 8 272 C 20 276, 32 270, 36 258 Z" fill="#9BAE87"/>
-      <path d="M112 112 C 122 102, 136 100, 146 108 C 136 118, 122 120, 112 112 Z" fill="#8FA07C"/>
-      <path d="M70 286 C 60 280, 48 284, 42 294 C 54 298, 64 294, 70 286 Z" fill="#8FA07C"/>
-
-      <g transform="translate(30,286) rotate(-28) scale(0.42)">
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(40)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(-40)"/>
-      </g>
-
-      <g transform="translate(150,104) rotate(22) scale(0.38)">
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petThird)" transform="rotate(0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petThird)" transform="rotate(40)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petThird)" transform="rotate(-40)"/>
-      </g>
-
-      <g transform="translate(40,256) rotate(14) scale(0.46)">
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petThird)" transform="rotate(0.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petThird)" transform="rotate(60.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petThird)" transform="rotate(120.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petThird)" transform="rotate(180.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petThird)" transform="rotate(240.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petThird)" transform="rotate(300.0)"/>
-        <circle r="4.5" fill="#8A5270"/>
-      </g>
-
-      <g transform="translate(70,196) rotate(-12) scale(0.6)">
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(0.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(51.4)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(102.9)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(154.3)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(205.7)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(257.1)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(308.6)"/>
-        <circle r="5.5" fill="#8A5270"/>
-        <g stroke="#F6E6C9" stroke-width="1.2" stroke-linecap="round">
-          <line x1="0" y1="0" x2="5" y2="-7"/>
-          <line x1="0" y1="0" x2="-6" y2="-5"/>
-          <line x1="0" y1="0" x2="-3" y2="7"/>
-          <line x1="0" y1="0" x2="6" y2="5"/>
-          <line x1="0" y1="0" x2="0" y2="-8"/>
-        </g>
-      </g>
-
-      <g transform="translate(112,128) rotate(18) scale(0.74)">
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(0.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(51.4)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(102.9)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(154.3)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(205.7)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(257.1)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petSecond)" transform="rotate(308.6)"/>
-        <circle r="6" fill="#8A5270"/>
-        <g stroke="#F6E6C9" stroke-width="1.2" stroke-linecap="round">
-          <line x1="0" y1="0" x2="5" y2="-7"/>
-          <line x1="0" y1="0" x2="-6" y2="-5"/>
-          <line x1="0" y1="0" x2="-3" y2="7"/>
-          <line x1="0" y1="0" x2="6" y2="5"/>
-          <line x1="0" y1="0" x2="0" y2="-8"/>
-        </g>
-      </g>
-
-      <g transform="translate(156,74) rotate(-6) scale(1.0)">
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petMain)" transform="rotate(0.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petMain)" transform="rotate(45.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petMain)" transform="rotate(90.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petMain)" transform="rotate(135.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petMain)" transform="rotate(180.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petMain)" transform="rotate(225.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petMain)" transform="rotate(270.0)"/>
-        <path d="M0,0 C -14,-10 -20,-34 -10,-58 C -4,-72 4,-72 10,-58 C 20,-34 14,-10 0,0 Z" fill="url(#petMain)" transform="rotate(315.0)"/>
-        <path d="M0,0 C -6,-16 -6,-34 0,-52" fill="none" stroke="#C98FAA" stroke-width="0.8" opacity="0.55"/>
-        <path d="M0,0 C 6,-16 6,-34 0,-52" fill="none" stroke="#C98FAA" stroke-width="0.8" opacity="0.55"/>
-        <circle r="8" fill="#8A5270"/>
-        <g stroke="#F6E6C9" stroke-width="1.2" stroke-linecap="round">
-          <line x1="0" y1="0" x2="5" y2="-7"/>
-          <line x1="0" y1="0" x2="-6" y2="-5"/>
-          <line x1="0" y1="0" x2="-3" y2="7"/>
-          <line x1="0" y1="0" x2="6" y2="5"/>
-          <line x1="0" y1="0" x2="0" y2="-8"/>
-        </g>
-      </g>
-    
-  </g>
-
-</svg>
 <nav class="ribbon-nav" aria-label="Jump to a section">
   <div class="ribbon-inner">
     <span class="ribbon-mark" aria-hidden="true">
@@ -1569,8 +1451,8 @@
   </section>
 
   <section class="howto-section" id="howto">
-    <svg class="petal petal--howto-l" viewBox="0 0 220 320" aria-hidden="true"><use href="#floral-spray"/></svg>
-    <svg class="petal petal--howto-r" viewBox="0 0 220 320" aria-hidden="true"><use href="#floral-spray"/></svg>
+    <img class="trail trail--howto-l" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="1700" loading="lazy" />
+    <img class="trail trail--howto-r" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="1700" loading="lazy" />
     <div class="wrap">
       <p class="eyebrow">Step by step</p>
       <h2 class="howto-title">How to do a breast self-exam</h2>
