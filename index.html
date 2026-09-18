@@ -105,7 +105,7 @@
   }
 
   :root {
-    --deco-rise: 86px;
+    --nav-h: 72px;
     --petal-w: 118px;
     --petal-inset: -34px;
   }
@@ -122,7 +122,7 @@
      breakpoints. */
   .bouquet {
     position: absolute;
-    top: calc(-1 * var(--deco-rise));
+    top: 40px;
     pointer-events: none;
     z-index: 0;
     width: clamp(165px, 34vw, 360px);
@@ -176,13 +176,13 @@
   }
 
   .trail--l {
-    top: calc(-1 * var(--deco-rise) + 44px);
-    height: calc(100% + var(--deco-rise));
+    top: 0;
+    height: 100%;
     left: -30px;
   }
   .trail--r {
-    top: calc(-1 * var(--deco-rise) + 68px);
-    height: calc(100% + var(--deco-rise));
+    top: 26px;
+    height: calc(100% - 26px);
     right: -30px;
     transform: scaleX(-1);
   }
@@ -1264,8 +1264,12 @@
   }
 
   .hero {
-    padding-top: clamp(20px, 4vh, 72px);
-    padding-top: clamp(20px, 4dvh, 72px);
+    /* Starts behind the banner rather than below it. Without this the hero's
+       pink began exactly where the banner ended, and that edge showed through
+       the translucent middle as a line with paler paper above it. */
+    margin-top: calc(-1 * var(--nav-h));
+    padding-top: calc(clamp(20px, 4vh, 72px) + var(--nav-h));
+    padding-top: calc(clamp(20px, 4dvh, 72px) + var(--nav-h));
   }
 
   .mascot-caption {
@@ -1318,16 +1322,9 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      rgba(252, 232, 234, 0.6) 0%,
-      rgba(252, 232, 234, 0.48) 46%,
-      rgba(252, 233, 235, 0.28) 72%,
-      rgba(251, 243, 242, 0.08) 90%,
-      transparent 100%
-    );
-    -webkit-backdrop-filter: blur(10px) saturate(1.05);
-    backdrop-filter: blur(10px) saturate(1.05);
+    background: none;
+    -webkit-backdrop-filter: blur(11px) saturate(1.03);
+    backdrop-filter: blur(11px) saturate(1.03);
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 44%, rgba(0, 0, 0, 0.5) 74%, transparent 100%);
     mask-image: linear-gradient(to bottom, #000 0%, #000 44%, rgba(0, 0, 0, 0.5) 74%, transparent 100%);
   }
@@ -1335,6 +1332,7 @@
   .ribbon-inner {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
     max-width: 1100px;
     margin: 0 auto;
@@ -1347,15 +1345,93 @@
 
   .ribbon-inner::-webkit-scrollbar { display: none; }
 
-  .ribbon-mark {
-    flex: none;
-    width: 13px;
-    height: 16px;
-    color: var(--rose-deep);
-    margin-right: 4px;
+  /* The hamburger. Hidden on wide screens, where the links fit across. */
+  .nav-toggle {
+    display: none;
+    position: relative;
+    margin: 0 auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 12px 14px;
+    width: 52px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
   }
 
-  .ribbon-mark svg { width: 100%; height: 100%; display: block; }
+  .nav-toggle-bars,
+  .nav-toggle-bars::before,
+  .nav-toggle-bars::after {
+    display: block;
+    width: 24px;
+    height: 2.5px;
+    border-radius: 2px;
+    background: var(--rose-deep);
+    transition: transform 0.22s ease, opacity 0.18s ease;
+  }
+
+  .nav-toggle-bars::before,
+  .nav-toggle-bars::after {
+    content: "";
+    position: absolute;
+    left: 14px;
+  }
+
+  .nav-toggle-bars::before { transform: translateY(-8px); }
+  .nav-toggle-bars::after { transform: translateY(8px); }
+
+  /* Open: the bars fold into a cross. */
+  .ribbon-nav.menu-open .nav-toggle-bars { background: transparent; }
+  .ribbon-nav.menu-open .nav-toggle-bars::before { transform: rotate(45deg); }
+  .ribbon-nav.menu-open .nav-toggle-bars::after { transform: rotate(-45deg); }
+
+  @media (max-width: 699px) {
+    .nav-toggle { display: flex; }
+
+    /* The links become a panel that drops from the bar, rather than a row
+       too wide to fit. */
+    .ribbon-inner {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      max-width: none;
+      padding: 4px 14px 26px;
+      overflow: visible;
+    }
+
+    .ribbon-nav.menu-open .ribbon-inner { display: flex; }
+
+    /* The bar itself has no tint, so the open panel brings its own backing,
+       otherwise the links would sit unreadable over the artwork. */
+    .ribbon-nav.menu-open .ribbon-inner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(252, 236, 238, 0.86);
+      -webkit-backdrop-filter: blur(14px) saturate(1.05);
+      backdrop-filter: blur(14px) saturate(1.05);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 90%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 0%, #000 90%, transparent 100%);
+    }
+
+    .ribbon-link {
+      text-align: center;
+      padding: 14px 8px;
+      font-size: 1.02rem;
+      border-bottom: none;
+    }
+
+    .ribbon-link + .ribbon-link {
+      border-top: 1px solid rgba(201, 106, 133, 0.16);
+    }
+  }
 
   .ribbon-link {
     flex: none;
@@ -1383,19 +1459,19 @@
   #howto { scroll-margin-top: 64px; }
 
   @media (min-width: 700px) {
-    .ribbon-inner { justify-content: center; gap: 8px; padding: 0 24px; }
+    .ribbon-inner { gap: 8px; padding: 0 24px; }
     .ribbon-link { font-size: 0.98rem; padding: 13px 14px 11px; }
-    .ribbon-mark { width: 15px; height: 18px; margin-right: 10px; }
   }
 
 </style>
 </head>
 <body>
 <nav class="ribbon-nav" aria-label="Jump to a section">
-  <div class="ribbon-inner">
-    <span class="ribbon-mark" aria-hidden="true">
-      <svg viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg"><path d="M20 22 C 8 14, 6 2, 14 2 C 20 2, 20 12, 20 22 C 20 12, 20 2, 26 2 C 34 2, 32 14, 20 22 Z" fill="currentColor"/><path d="M20 22 L 10 48 L 16 44 L 20 48 L 24 44 L 30 48 Z" fill="currentColor"/></svg>
-    </span>
+  <button type="button" class="nav-toggle" id="nav-toggle"
+          aria-expanded="false" aria-controls="ribbon-inner" aria-label="Open menu">
+    <span class="nav-toggle-bars" aria-hidden="true"></span>
+  </button>
+  <div class="ribbon-inner" id="ribbon-inner">
     <a class="ribbon-link" href="#howto">Self-exam</a>
     <button type="button" class="ribbon-link" data-panel="panel-signs">Know the signs</button>
     <button type="button" class="ribbon-link" data-panel="panel-screening">Screening</button>
@@ -1984,6 +2060,36 @@
     (function () {
       var y = document.getElementById('year');
       if (y) y.textContent = new Date().getFullYear();
+    })();
+
+    /* Hamburger menu, narrow screens only */
+    (function () {
+      var nav = document.querySelector('.ribbon-nav');
+      var toggle = document.getElementById('nav-toggle');
+      if (!nav || !toggle) return;
+
+      function setOpen(open) {
+        nav.classList.toggle('menu-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      }
+
+      toggle.addEventListener('click', function () {
+        setOpen(!nav.classList.contains('menu-open'));
+      });
+
+      // Choosing a destination closes the menu behind you.
+      nav.querySelectorAll('.ribbon-link').forEach(function (link) {
+        link.addEventListener('click', function () { setOpen(false); });
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!nav.contains(e.target)) setOpen(false);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setOpen(false);
+      });
     })();
 
     (function () {
