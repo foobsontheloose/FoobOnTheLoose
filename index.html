@@ -137,8 +137,8 @@
     filter: blur(0.5px) saturate(0.76);
   }
 
-  .bouquet--tl { left: -22px; }
-  .bouquet--tr { right: -22px; transform: scaleX(-1); }
+  .bouquet--tl { left: 0; }
+  .bouquet--tr { right: 0; transform: scaleX(-1); }
 
   /* Side trails: a ribbon streamer threaded with mixed blooms, running on
      down from the corner bouquets. The mask fades both ends, so the trail
@@ -157,7 +157,7 @@
     object-fit: cover;
     object-position: center top;
     filter: blur(var(--trail-blur, 0.7px)) saturate(var(--trail-sat, 0.7));
-    --trail-edge: linear-gradient(to right, #000 0%, #000 44%, rgba(0, 0, 0, 0.72) 68%, rgba(0, 0, 0, 0.3) 87%, transparent 100%);
+    --trail-edge: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.55) 9%, #000 22%, #000 46%, rgba(0, 0, 0, 0.72) 68%, rgba(0, 0, 0, 0.3) 87%, transparent 100%);
     -webkit-mask-composite: source-in;
     mask-composite: intersect;
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.55) 82%, transparent 99%), var(--trail-edge);
@@ -178,12 +178,12 @@
   .trail--l {
     top: 0;
     height: 100%;
-    left: -30px;
+    left: 0;
   }
   .trail--r {
     top: 26px;
     height: calc(100% - 26px);
-    right: -30px;
+    right: 0;
     transform: scaleX(-1);
   }
 
@@ -204,8 +204,8 @@
     mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 16%, rgba(0, 0, 0, 0.85) 38%, rgba(0, 0, 0, 0.6) 72%, rgba(0, 0, 0, 0.32) 100%), var(--trail-edge);
   }
 
-  .trail--tabs-l { left: -34px; }
-  .trail--tabs-r { right: -34px; transform: scaleX(-1); }
+  .trail--tabs-l { left: 0; }
+  .trail--tabs-r { right: 0; transform: scaleX(-1); }
 
   .petal--tabs-l {
     top: 2%;
@@ -238,8 +238,8 @@
     mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 14%, rgba(0, 0, 0, 0.7) 32%, rgba(0, 0, 0, 0.4) 62%, transparent 94%), var(--trail-edge);
   }
 
-  .trail--howto-l { left: -46px; }
-  .trail--howto-r { right: -46px; transform: scaleX(-1); }
+  .trail--howto-l { left: 0; }
+  .trail--howto-r { right: 0; transform: scaleX(-1); }
 
   .mascot-row {
     position: relative;
