@@ -1381,6 +1381,20 @@
     transition: color 0.15s ease;
   }
 
+  /* Social links carry their mark, so they are recognisable before they are
+     read. The icon inherits the link colour, including on hover. */
+  .sitemap-link:has(svg) {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .sitemap-link svg {
+    width: 15px;
+    height: 15px;
+    flex: none;
+  }
+
   .sitemap-link:hover,
   .sitemap-link:focus-visible { color: var(--rose-deep); }
 
@@ -2457,7 +2471,7 @@
 
         <div class="tab-panel" id="panel-follow" hidden>
           <h2>Get the reminder every month</h2>
-          <p>Foobie turns up on both Instagram and Facebook with the monthly nudge, real talk, and a community that's got your back (and front). Much the same on each &mdash; follow whichever one you actually open.</p>
+          <p>Foobie is loose on both Instagram and Facebook, and she has no intention of behaving: your monthly nudge, real talk, the ridiculous bits nobody warns you about, and a community that's got your back (and front). Much the same on both &mdash; follow whichever one you actually open.</p>
           <div class="handles">
             <a class="handle" href="https://instagram.com/foobsontheloose" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="7" r="1" fill="currentColor"/></svg>
@@ -2513,8 +2527,8 @@
           <li><button type="button" class="sitemap-link" data-panel="panel-support">Support &amp; resources</button></li>
           <li><button type="button" class="sitemap-link" data-panel="panel-about">Our story</button></li>
           <li><button type="button" class="sitemap-link" data-panel="panel-follow">Follow along</button></li>
-          <li><a class="sitemap-link" href="https://instagram.com/foobsontheloose" target="_blank" rel="noopener">Instagram</a></li>
-          <li><a class="sitemap-link" href="https://www.facebook.com/people/Foobs-On-The-Loose/61572931987915/" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a class="sitemap-link" href="https://instagram.com/foobsontheloose" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="7" r="1.1" fill="currentColor"/></svg><span>Instagram</span></a></li>
+          <li><a class="sitemap-link" href="https://www.facebook.com/people/Foobs-On-The-Loose/61572931987915/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.45-.13-2.43 0-4.1 1.48-4.1 4.2v2.23H7.4V13h2.75v8h3.35Z"/></svg><span>Facebook</span></a></li>
         </ul>
       </div>
     </nav>
