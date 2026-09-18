@@ -617,18 +617,14 @@
 
   .modal-close:hover { background: var(--petal); }
 
-  /* Tells you there is more below, and scrolls you there if you tap it.
-     Sticky rather than fixed, so it rides the bottom of the card's own
-     scroll area without needing to know the card's size. Hidden once you
-     reach the end, and still without the bob for reduced-motion users. */
-  .scroll-cue {
-    position: sticky;
-    top: calc(88dvh - 96px);
-    float: right;
-    z-index: 3;
+  /* Two of these: one inside the modal's scroll area, one fixed to the page.
+     Both point down while there is more below and flip to point up at the
+     end, staying in the same spot so it reads as one control rather than two.
+     Tapping follows whichever way it points. */
+  .scroll-cue,
+  .page-cue {
     width: 40px;
     height: 40px;
-    margin: 0 -4px -40px 0;
     padding: 0;
     border: none;
     border-radius: 50%;
@@ -642,12 +638,47 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+
+  .scroll-cue svg,
+  .page-cue svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  /* At the end it turns to point back to the top. */
+  .scroll-cue.at-end svg,
+  .page-cue.at-end svg { transform: rotate(180deg); }
+
+  /* Sticky inside the card, so it rides the bottom of the card's own scroll
+     area without needing to know the card's size. */
+  .scroll-cue {
+    position: sticky;
+    top: calc(88dvh - 96px);
+    float: right;
+    z-index: 3;
+    margin: 0 -4px -40px 0;
     animation: cue-bob 1.9s ease-in-out infinite;
   }
 
-  .scroll-cue svg { width: 20px; height: 20px; display: block; }
+  .modal-card.can-scroll .scroll-cue { opacity: 1; visibility: visible; }
 
-  .modal-card.has-more .scroll-cue { opacity: 1; visibility: visible; }
+  /* Fixed to the page, and out of the way whenever a panel is open. */
+  .page-cue {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 40;
+    animation: cue-bob 1.9s ease-in-out infinite;
+  }
+
+  body.page-scrollable .page-cue { opacity: 1; visibility: visible; }
+  body.panel-open .page-cue { opacity: 0; visibility: hidden; }
+
+  .scroll-cue.at-end,
+  .page-cue.at-end { animation: none; }
 
   @keyframes cue-bob {
     0%, 100% { transform: translateY(0); }
@@ -655,7 +686,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .scroll-cue { animation: none; }
+    .scroll-cue,
+    .page-cue { animation: none; }
   }
 
   .tab-panel h2 {
@@ -2116,6 +2148,10 @@
     </div>
   </div>
 
+  <button type="button" class="page-cue" id="page-cue" aria-label="Scroll down">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
   <footer>
     <p class="footer-brand">Foobs On the Loose · foobsontheloose.com</p>
     <p class="footer-legal">&copy; <span id="year">2026</span> Foobs On the Loose. Foobie&trade;, the name and the artwork are ours.<br>The breast health information is free to share and reproduce &mdash; that's the whole point.</p>
@@ -2173,31 +2209,41 @@
         closeBtn.innerHTML = isDetail ? '&lsaquo;' : '&times;';
         closeBtn.setAttribute('aria-label', isDetail ? 'Back to all options' : 'Close');
         modal.classList.add('open');
+        document.body.classList.add('panel-open');
         document.body.style.overflow = 'hidden';
         card.scrollTop = 0;
         requestAnimationFrame(updateCue);
       }
 
-      // Show the cue only while something is still below the fold, and let a
-      // tap carry you down a screenful.
+      // The cue points down while there is more below and flips to point up at
+      // the end, staying put so it reads as one control. Tapping follows
+      // whichever way it is pointing.
       var cue = document.getElementById('scroll-cue');
 
       function updateCue() {
         if (!cue) return;
-        var moreBelow = card.scrollHeight - card.scrollTop - card.clientHeight > 24;
-        card.classList.toggle('has-more', moreBelow);
+        var scrollable = card.scrollHeight - card.clientHeight > 24;
+        var atEnd = card.scrollHeight - card.scrollTop - card.clientHeight <= 24;
+        card.classList.toggle('can-scroll', scrollable);
+        cue.classList.toggle('at-end', scrollable && atEnd);
+        cue.setAttribute('aria-label', atEnd ? 'Back to top' : 'Scroll down for more');
       }
 
       if (cue) {
         card.addEventListener('scroll', updateCue, { passive: true });
         window.addEventListener('resize', updateCue);
         cue.addEventListener('click', function () {
-          card.scrollBy({ top: card.clientHeight * 0.82, behavior: 'smooth' });
+          if (cue.classList.contains('at-end')) {
+            card.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            card.scrollBy({ top: card.clientHeight * 0.82, behavior: 'smooth' });
+          }
         });
       }
 
       function closeModal() {
         modal.classList.remove('open');
+        document.body.classList.remove('panel-open');
         document.body.style.overflow = '';
       }
 
@@ -2234,6 +2280,33 @@
           closeModal();
         }
       }
+    })();
+
+    /* Page scroll cue: same control, same behaviour, for the page itself */
+    (function () {
+      var cue = document.getElementById('page-cue');
+      if (!cue) return;
+
+      function update() {
+        var doc = document.documentElement;
+        var scrollable = doc.scrollHeight - window.innerHeight > 120;
+        var atEnd = window.scrollY + window.innerHeight >= doc.scrollHeight - 40;
+        document.body.classList.toggle('page-scrollable', scrollable);
+        cue.classList.toggle('at-end', scrollable && atEnd);
+        cue.setAttribute('aria-label', atEnd ? 'Back to top' : 'Scroll down');
+      }
+
+      cue.addEventListener('click', function () {
+        if (cue.classList.contains('at-end')) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' });
+        }
+      });
+
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
     })();
 
     /* ---- Calendar reminder ---- */
