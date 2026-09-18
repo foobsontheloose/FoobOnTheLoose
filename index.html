@@ -31,7 +31,14 @@
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    /* The side trails deliberately overhang their sections. Clip the
+       horizontal overflow here rather than per-section, which would also
+       cut off the vertical overlap that makes the flowers continuous.
+       `clip` keeps the sticky nav working; `hidden` would break it. */
+    overflow-x: clip;
+  }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -156,8 +163,10 @@
   .trail--l,
   .trail--r {
     opacity: 0.86;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 34%, rgba(0, 0, 0, 0.72) 62%, rgba(0, 0, 0, 0.4) 84%, rgba(0, 0, 0, 0.22) 100%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 34%, rgba(0, 0, 0, 0.72) 62%, rgba(0, 0, 0, 0.4) 84%, rgba(0, 0, 0, 0.22) 100%);
+    /* Reaches zero before the hero's bottom edge, so there is nothing left
+       for the clip to cut through. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 30%, rgba(0, 0, 0, 0.7) 58%, rgba(0, 0, 0, 0.34) 80%, transparent 97%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 30%, rgba(0, 0, 0, 0.7) 58%, rgba(0, 0, 0, 0.34) 80%, transparent 97%);
   }
 
   .trail--l {
@@ -174,13 +183,17 @@
      it continues the hero rather than starting over. */
   .trail--tabs-l,
   .trail--tabs-r {
-    top: 0;
-    opacity: 0.3;
-    object-position: center 42%;
+    /* Begins well above the section so it overlaps the hero's fading tail.
+       Both are part-transparent through the overlap, so they blend instead
+       of meeting on a line. */
+    top: -260px;
+    height: calc(100% + 260px);
+    opacity: 0.34;
+    object-position: center 38%;
     --trail-blur: 1.1px;
     --trail-sat: 0.6;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 55%, rgba(0, 0, 0, 0.3) 100%);
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 55%, rgba(0, 0, 0, 0.3) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 16%, rgba(0, 0, 0, 0.85) 38%, rgba(0, 0, 0, 0.6) 72%, rgba(0, 0, 0, 0.32) 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 16%, rgba(0, 0, 0, 0.85) 38%, rgba(0, 0, 0, 0.6) 72%, rgba(0, 0, 0, 0.32) 100%);
   }
 
   .trail--tabs-l { left: -34px; }
@@ -207,13 +220,14 @@
      the whole page. Present, but never competing with the instructions. */
   .trail--howto-l,
   .trail--howto-r {
-    top: 0;
+    top: -220px;
+    height: calc(100% + 220px);
     opacity: 0.16;
-    object-position: center 78%;
+    object-position: center 74%;
     --trail-blur: 1.5px;
     --trail-sat: 0.55;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.45) 50%, transparent 96%);
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.45) 50%, transparent 96%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 14%, rgba(0, 0, 0, 0.7) 32%, rgba(0, 0, 0, 0.4) 62%, transparent 94%);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 14%, rgba(0, 0, 0, 0.7) 32%, rgba(0, 0, 0, 0.4) 62%, transparent 94%);
   }
 
   .trail--howto-l { left: -46px; }
@@ -471,7 +485,9 @@
   .tabs-section {
     padding: 8px 24px 70px;
     position: relative;
-    overflow: hidden;
+    /* No overflow clip: the trail deliberately reaches up past the top edge
+       to overlap the hero's. body has overflow-x hidden, so nothing spills
+       sideways. */
   }
 
   .tab-grid {
@@ -935,10 +951,17 @@
 
   /* HOW TO — featured on-page section */
   .howto-section {
-    background: var(--petal-soft);
+    /* Its tint fades up from the paper above and back down to it below, so
+       the section has no hard colour edge at either end. */
+    background: linear-gradient(
+      to bottom,
+      var(--paper) 0,
+      var(--petal-soft) 190px,
+      var(--petal-soft) calc(100% - 170px),
+      var(--paper) 100%
+    );
     padding: 56px 24px 64px;
     position: relative;
-    overflow: hidden;
   }
 
   .eyebrow {
