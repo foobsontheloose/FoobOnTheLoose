@@ -138,7 +138,7 @@
     pointer-events: none;
     z-index: 0;
     width: clamp(88px, 21vw, 215px);
-    aspect-ratio: 380 / 1700;
+    aspect-ratio: 380 / 2600;
     height: auto;
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 42%, rgba(0, 0, 0, 0.35) 72%, transparent 95%);
     mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 42%, rgba(0, 0, 0, 0.35) 72%, transparent 95%);
@@ -154,6 +154,22 @@
     opacity: 0.86;
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 13%, rgba(0, 0, 0, 0.74) 33%, rgba(0, 0, 0, 0.44) 58%, rgba(0, 0, 0, 0.2) 80%, transparent 96%);
     mask-image: linear-gradient(to bottom, #000 0%, #000 13%, rgba(0, 0, 0, 0.74) 33%, rgba(0, 0, 0, 0.44) 58%, rgba(0, 0, 0, 0.2) 80%, transparent 96%);
+  }
+
+  /* The hero varies a lot in height between phone and desktop, so these two
+     stretch to fill it rather than taking their height from the image's
+     proportions. object-fit crops the strip's width instead of squashing it,
+     which keeps the flowers their proper shape and guarantees the trail
+     reaches the bottom of the hero at any screen size. */
+  .trail--l,
+  .trail--r {
+    /* 100% of the hero, not of the image's own proportions. An <img> with
+       height:auto ignores a bottom offset and uses its intrinsic height, so
+       this has to be explicit. The hero clips the overhang. */
+    height: 100%;
+    aspect-ratio: auto;
+    object-fit: cover;
+    object-position: center top;
   }
 
   .trail--l {
@@ -1352,8 +1368,8 @@
 
 
   <section class="hero">
-          <img class="trail trail--l" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="1700" loading="lazy" />
-      <img class="trail trail--r" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="1700" loading="lazy" />
+          <img class="trail trail--l" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" loading="lazy" />
+      <img class="trail trail--r" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" loading="lazy" />
       <img class="bouquet bouquet--tl" src="images/bouquet.webp" alt="" aria-hidden="true" width="716" height="404" />
       <img class="bouquet bouquet--tr" src="images/bouquet.webp" alt="" aria-hidden="true" width="716" height="404" />
 
@@ -1394,8 +1410,8 @@
   </section>
 
   <section class="tabs-section">
-    <img class="trail trail--tabs-l" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="1700" loading="lazy" />
-    <img class="trail trail--tabs-r" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="1700" loading="lazy" />
+    <img class="trail trail--tabs-l" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" loading="lazy" />
+    <img class="trail trail--tabs-r" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" loading="lazy" />
     <div class="wrap">
       <div class="tab-grid" role="list" aria-label="Page sections">
         <button class="tab-square" data-panel="panel-why">
@@ -1451,8 +1467,8 @@
   </section>
 
   <section class="howto-section" id="howto">
-    <img class="trail trail--howto-l" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="1700" loading="lazy" />
-    <img class="trail trail--howto-r" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="1700" loading="lazy" />
+    <img class="trail trail--howto-l" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" loading="lazy" />
+    <img class="trail trail--howto-r" src="images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" loading="lazy" />
     <div class="wrap">
       <p class="eyebrow">Step by step</p>
       <h2 class="howto-title">How to do a breast self-exam</h2>
