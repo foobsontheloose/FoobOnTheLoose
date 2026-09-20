@@ -1788,9 +1788,14 @@
     transition: color 0.15s ease, border-color 0.15s ease;
   }
 
-  .ribbon-link:hover {
-    color: var(--rose-deep);
-    border-bottom-color: var(--rose-deep);
+  /* Only where there is a real pointer. A touch screen has nothing to hover
+     with, but it fakes one on tap, and that faked state can stay switched on
+     after the finger has gone — leaving a menu word lit up for no reason. */
+  @media (hover: hover) {
+    .ribbon-link:hover {
+      color: var(--rose-deep);
+      border-bottom-color: var(--rose-deep);
+    }
   }
 
   /* stop the sticky bar covering a heading it scrolls to */
