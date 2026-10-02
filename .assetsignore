@@ -17,6 +17,7 @@ wrangler.jsonc
 
 # Original reconstruction diagrams, superseded by the recon-*.jpg exports
 images/ComboHybrid.png
+images/combohybridfix.png
 images/DIEP.png
 images/Direct.png
 images/FatGrafting.png
