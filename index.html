@@ -2633,7 +2633,18 @@
       var closeBtn = document.getElementById('modal-close');
       var panels = document.querySelectorAll('.tab-panel');
       var card = modal.querySelector('.modal-card');
+
+      // Where the reader had got to in the reconstruction list. Backing out of
+      // a detail returns them to that spot: the list is long enough that
+      // snapping to the top loses the option they were just reading about.
+      var listScroll = 0;
+
       function openPanel(panelId) {
+        var reconList = document.getElementById('panel-recon');
+        var leavingList = reconList && !reconList.hidden;
+        var toDetail = /^recon-/.test(panelId) && panelId !== 'panel-recon';
+        if (leavingList && toDetail) listScroll = card.scrollTop;
+
         panels.forEach(function (p) {
           p.hidden = (p.id !== panelId);
         });
@@ -2645,7 +2656,10 @@
         modal.classList.add('open');
         document.body.classList.add('panel-open');
         document.body.style.overflow = 'hidden';
-        card.scrollTop = 0;
+        // reading scrollHeight forces layout, so the restored offset is not
+        // clamped against the height of the panel we just left
+        void card.scrollHeight;
+        card.scrollTop = (panelId === 'panel-recon') ? listScroll : 0;
         requestAnimationFrame(updateCue);
       }
 
@@ -2676,6 +2690,8 @@
       }
 
       function closeModal() {
+        // a fresh visit to the list starts at the top again
+        listScroll = 0;
         modal.classList.remove('open');
         document.body.classList.remove('panel-open');
         document.body.style.overflow = '';
