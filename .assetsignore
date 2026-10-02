@@ -5,7 +5,7 @@
 # .jpg diagrams, so every reconstruction page rendered a broken image on the
 # deployed site while working perfectly in local preview.
 #
-# The page requests 38 files from images/: the 22 .webp and 16 .jpg
+# The page requests 39 files from images/: the 22 .webp and 17 .jpg
 # listed nowhere below. Everything below is source material or a working
 # master that nothing on the page links to.
 
@@ -28,6 +28,7 @@ images/PAP.png
 images/SGAP.png
 images/TEtoIMPLANT.png
 images/TRAM.png
+images/PedicledTram.png
 images/TUG.png
 
 # Watercolour source art and the full-size masters the trail is built from
