@@ -10,6 +10,7 @@
 # master that nothing on the page links to.
 
 build-trail.py
+wip/*
 wrangler.jsonc
 .assetsignore
 .DS_Store
