@@ -1930,6 +1930,12 @@
           </span>
           <span class="tab-label">Follow along</span>
         </button>
+        <button class="tab-square tab-square--wide" data-panel="panel-risk">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.5 20.5 8v5.1c0 4.2-3.3 6.9-8.5 8.4-5.2-1.5-8.5-4.2-8.5-8.4V8L12 3.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 8.6v4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+          </span>
+          <span class="tab-label">Know your risk</span>
+        </button>
         <button class="tab-square tab-square--wide" data-panel="panel-about">
           <span class="tab-icon">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 20.5s-6.8-4.1-9-8C1.2 8.6 3 5.5 6.2 5.5c1.9 0 3.4 1.1 4.4 2.5h2.8c1-1.4 2.5-2.5 4.4-2.5 3.2 0 5 3.1 3.2 7-2.2 3.9-9 8-9 8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.6 12.4c.9-1.5 1.7-1.5 2.4 0 .7 1.5 1.5 1.5 2.4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -2432,6 +2438,31 @@
           <p class="recon-src">Phone numbers, hours and eligibility verified against each organization's own site. Programs and funding do change — if you find something out of date, please tell us so we can fix it.</p>
         </div>
 
+        <div class="tab-panel" id="panel-risk" hidden>
+          <h2>Know your risk</h2>
+          <p class="recon-lede">Almost everything on this page is written for average risk. If yours is higher, the schedule changes &mdash; and a number is how you find out which group you are in.</p>
+
+          <h3 class="recon-group-title">Why the number matters</h3>
+          <p class="recon-body">The American Cancer Society says women at high risk should have <strong>a breast MRI and a mammogram every year, usually starting at age 30</strong>. One of the things that puts you in that group is a lifetime risk of <strong>about 20% to 25% or greater</strong>. That is what a risk score is for. It is not trivia; it decides what screening you should be getting, and at what age.</p>
+
+          <h3 class="recon-group-title">You may already be in that group without doing any calculation</h3>
+          <p class="recon-body">The ACS counts you as high risk, whatever a calculator says, if you have a known BRCA1 or BRCA2 change; a first-degree relative with one and you have not been tested yourself; had radiation to the chest before you were 30; or have Li-Fraumeni, Cowden or Bannayan-Riley-Ruvalcaba syndrome, or a first-degree relative with one of those. If any of that is you, take it to your doctor rather than to a website.</p>
+
+          <h3 class="recon-group-title">The NCI tool</h3>
+          <p class="recon-body">The <a href="https://bcrisktool.cancer.gov/" target="_blank" rel="noopener">Breast Cancer Risk Assessment Tool</a>, often called the Gail model, takes about five minutes. It uses your own history together with breast cancer in your <strong>first-degree relatives</strong> &mdash; mother, sisters, daughters &mdash; and gives your risk over the next five years and up to age 90. It is free, it is the National Cancer Institute's own, and there is nothing being sold on the other end of it.</p>
+          <p class="recon-body">One limit worth understanding before you use it: it counts first-degree relatives only. The ACS says the tool used to decide about MRI screening should also include <strong>second-degree relatives &mdash; aunts and grandparents, on both sides</strong>. So this gives you a picture, not the answer to the MRI question.</p>
+
+          <h3 class="recon-group-title">The Tyrer-Cuzick tool</h3>
+          <p class="recon-body">Also called IBIS. It takes a fuller family history, on both sides, and factors in breast density, which is why breast imaging centres use it when they are deciding whether someone crosses the 20% line. Ask your doctor or your imaging centre to run it &mdash; it is the one that answers the screening question.</p>
+
+          <h3 class="recon-group-title">When these tools do not apply to you</h3>
+          <p class="recon-body">The NCI says plainly that its tool <strong>cannot accurately estimate risk</strong> for women carrying a BRCA1 or BRCA2 mutation, or for women with a previous invasive or in situ breast cancer &mdash; and that includes DCIS and LCIS. Tyrer-Cuzick says the same: if you have been diagnosed, do not use it. If that is you, the number is not yours to calculate. Your team works from what actually happened to you.</p>
+          <p class="recon-body">The NCI also notes the tool is validated for women in the United States who identify as White, Black or African American, Hispanic, and Asian and Pacific Islander; that it may underestimate risk in Black women who have had previous biopsies and in Hispanic women born outside the United States; and that estimates for American Indian and Alaska Native women are based partly on data for White women and may be inaccurate.</p>
+
+          <p class="signs-note">And one thing the NCI says that is worth carrying with you: these numbers cannot say which woman will develop breast cancer. Some women who never develop it have higher estimates than some women who do. A low number is not a promise, and a high one is not a sentence. It is a reason to have a specific conversation.</p>
+          <p class="recon-src">Sources: <a href="https://bcrisktool.cancer.gov/" target="_blank" rel="noopener">National Cancer Institute &mdash; Breast Cancer Risk Assessment Tool</a>; <a href="https://www.cancer.org/cancer/types/breast-cancer/screening-tests-and-early-detection/american-cancer-society-recommendations-for-the-early-detection-of-breast-cancer.html" target="_blank" rel="noopener">American Cancer Society &mdash; screening guidelines</a>.</p>
+        </div>
+
         <div class="tab-panel" id="panel-about" hidden>
           <h2>About me</h2>
 
@@ -2573,6 +2604,7 @@
           <li><button type="button" class="sitemap-link" data-panel="panel-why">Why it matters</button></li>
           <li><button type="button" class="sitemap-link" data-panel="panel-signs">Know the signs</button></li>
           <li><button type="button" class="sitemap-link" data-panel="panel-screening">Screening &amp; mammograms</button></li>
+          <li><button type="button" class="sitemap-link" data-panel="panel-risk">Know your risk</button></li>
           <li><button type="button" class="sitemap-link" data-panel="panel-men">Men get it too</button></li>
         </ul>
       </div>
