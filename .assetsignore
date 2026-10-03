@@ -55,6 +55,7 @@ images/add-areolae.py
 # step-N files, not these
 images/Step_1_Look_in_the_Mirror.png
 images/Step_2_Raise_Your_Arms.png
+images/Step_3_800x2000_no_inner_panel.png
 images/Step_4_Check_Lying_Down.png
 
 # Camera originals: the wall serves the optimised photo-NN.webp files
