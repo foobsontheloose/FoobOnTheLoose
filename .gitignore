@@ -1,2 +1,6 @@
 .DS_Store
 .claude/
+
+# Source cards for the step illustrations: kept on disk, not in the repo.
+# Cloudflare builds began failing once these were added.
+images/Step_*.png
