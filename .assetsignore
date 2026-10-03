@@ -54,6 +54,7 @@ images/add-areolae.py
 # Source cards for the self-exam steps: the page uses the cropped
 # step-N files, not these
 images/Step_1_Look_in_the_Mirror.png
+images/Step_2_Raise_Your_Arms.png
 images/Step_4_Check_Lying_Down.png
 
 # Camera originals: the wall serves the optimised photo-NN.webp files
