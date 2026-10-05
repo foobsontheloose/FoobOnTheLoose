@@ -1202,6 +1202,10 @@
     line-height: 1.65;
   }
 
+  /* Consecutive paragraphs need a gap. Everywhere else a heading or an image
+     sits between them, so this only shows where two run together. */
+  .recon-body + .recon-body { margin-top: 13px; }
+
   /* HOW TO — featured on-page section */
   .howto-section {
     /* Its tint fades up from the paper above and back down to it below, so
@@ -2323,7 +2327,7 @@
           </ul>
 
           <p class="recon-body">Most plans have to cover screening mammograms as <a href="https://www.healthcare.gov/preventive-care-women/" target="_blank" rel="noopener">preventive care</a>, without a copay. What that means for you depends on your plan, so check yours.</p>
-          <p class="recon-body">All of the above is for women at average risk. If yours is higher &mdash; a strong family history, a known gene change, or chest radiation when you were young &mdash; the advice is different: usually an MRI <em>and</em> a mammogram every year, often starting at 30. <button type="button" class="panel-link" data-goto="panel-risk">How to find out which group you are in</button>.</p>
+          <p class="recon-body">All of the above is for women at average risk. If yours is higher &mdash; a strong family history, a known gene change, or chest radiation when you were young &mdash; the advice is different: usually an MRI <em>and</em> a mammogram every year, often starting at 30. There is more on <button type="button" class="panel-link" data-goto="panel-risk">how to find out which group you are in</button>.</p>
 
           <h3 class="recon-group-title">After a mastectomy</h3>
           <p class="recon-body">Screening changes. A reconstructed breast is not usually given mammograms; the chest is checked by physical examination instead. If you still have your other breast, it carries on being screened as normal. Knowing what is normal for your chest wall matters just as much after surgery as before it &mdash; new lumps, thickening or skin changes are still worth a call.</p>
