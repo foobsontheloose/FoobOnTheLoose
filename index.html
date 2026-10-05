@@ -1063,6 +1063,21 @@
 
   .recon-src a:hover { color: var(--rose-deep); }
 
+  /* Opens another panel from inside running text, so a point made in full
+     elsewhere can be pointed at rather than repeated here. */
+  .panel-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: var(--rose-deep);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+
+  .panel-link:hover { color: var(--ink); }
+
   .info-note {
     font-size: 0.93rem;
     color: #4B3540;
@@ -2307,9 +2322,13 @@
             <li>The Task Force says the evidence isn't yet clear enough to advise either way for women 75 and over, or on extra scans for dense breasts</li>
           </ul>
 
-          <p class="info-note">Two things worth knowing. On cost: most plans have to cover screening mammograms as <a href="https://www.healthcare.gov/preventive-care-women/" target="_blank" rel="noopener">preventive care</a>, without a copay. What that means for you depends on your plan, so check yours. And if you are at high risk — a strong family history, a known gene change, or chest radiation when you were young — the advice is different again: usually an MRI <em>and</em> a mammogram every year, often starting at 30. Ask your doctor which group you're in.</p>
+          <p class="recon-body">Most plans have to cover screening mammograms as <a href="https://www.healthcare.gov/preventive-care-women/" target="_blank" rel="noopener">preventive care</a>, without a copay. What that means for you depends on your plan, so check yours.</p>
+          <p class="recon-body">All of the above is for women at average risk. If yours is higher &mdash; a strong family history, a known gene change, or chest radiation when you were young &mdash; the advice is different: usually an MRI <em>and</em> a mammogram every year, often starting at 30. <button type="button" class="panel-link" data-goto="panel-risk">How to find out which group you are in</button>.</p>
 
-          <p class="info-note"><strong>After a mastectomy, screening changes.</strong> A reconstructed breast is not usually given mammograms; the chest is checked by physical examination instead. If you still have your other breast, it carries on being screened as normal. Knowing what is normal for your chest wall matters just as much after surgery as before it &mdash; new lumps, thickening or skin changes are still worth a call.</p>
+          <h3 class="recon-group-title">After a mastectomy</h3>
+          <p class="recon-body">Screening changes. A reconstructed breast is not usually given mammograms; the chest is checked by physical examination instead. If you still have your other breast, it carries on being screened as normal. Knowing what is normal for your chest wall matters just as much after surgery as before it &mdash; new lumps, thickening or skin changes are still worth a call.</p>
+
+          
 
           <p class="signs-note">The ACS does not recommend clinical breast exams as a screening test for women at average risk. That isn't a reason to skip appointments — it's a reason not to rely on them instead of a mammogram.</p>
           <p class="recon-src">Sources: <a href="https://www.cancer.org/cancer/types/breast-cancer/screening-tests-and-early-detection/american-cancer-society-recommendations-for-the-early-detection-of-breast-cancer.html" target="_blank" rel="noopener">American Cancer Society &mdash; screening guidelines</a>; <a href="https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/breast-cancer-screening" target="_blank" rel="noopener">U.S. Preventive Services Task Force</a>; <a href="https://www.cancer.org/cancer/types/breast-cancer/screening-tests-and-early-detection/mammograms/having-a-mammogram-after-youve-had-breast-cancer-surgery.html" target="_blank" rel="noopener">ACS &mdash; mammograms after breast cancer surgery</a>; <a href="https://www.healthcare.gov/preventive-care-women/" target="_blank" rel="noopener">healthcare.gov &mdash; preventive care for women</a>.</p>
