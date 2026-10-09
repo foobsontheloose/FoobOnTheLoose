@@ -5,8 +5,9 @@
 # .jpg diagrams, so every reconstruction page rendered a broken image on the
 # deployed site while working perfectly in local preview.
 #
-# The page requests 39 files from images/: the 22 .webp and 17 .jpg
-# listed nowhere below. Everything below is source material or a working
+# The page requests 42 files from images/: the 24 .webp and 18 .jpg
+# listed nowhere below (share-card.jpg among them - it is the social
+# preview image, fetched by Facebook and iMessage, so it must deploy). Everything below is source material or a working
 # master that nothing on the page links to.
 
 build-trail.py
