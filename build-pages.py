@@ -54,6 +54,32 @@ PAGE_CSS = """
   overflow: visible;
 }
 .page-card .tab-panel { display: block; }
+/* Standalone pages need navigation that works with no script at all, so
+   they do not reuse the homepage's hamburger dropdown. This is a plain bar
+   that wraps onto a second row on a narrow screen. */
+.sa-nav {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 20px;
+  padding: 14px 16px 10px;
+  background: rgba(251, 243, 242, 0.92);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(201, 106, 133, 0.14);
+}
+.sa-nav a {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 4px 2px;
+}
+.sa-nav a:hover { color: var(--rose-deep); }
+
 .page-home {
   display: block;
   max-width: 520px;
@@ -178,15 +204,13 @@ def build(pid, slug, classes, inner):
 <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body class="standalone">
-<nav class="ribbon-nav" aria-label="Jump to a section">
-  <div class="ribbon-inner is-open">
-    <a class="ribbon-link" href="/#howto">Self-exam</a>
-    <a class="ribbon-link" href="/know-the-signs">Know the signs</a>
-    <a class="ribbon-link" href="/screening">Screening</a>
-    <a class="ribbon-link" href="/reconstruction">Reconstruction</a>
-    <a class="ribbon-link" href="/support">Support</a>
-    <a class="ribbon-link" href="/why-it-matters">Why it matters</a>
-  </div>
+<nav class="sa-nav" aria-label="Sections">
+    <a href="/#howto">Self-exam</a>
+    <a href="/know-the-signs">Know the signs</a>
+    <a href="/screening">Screening</a>
+    <a href="/reconstruction">Reconstruction</a>
+    <a href="/support">Support</a>
+    <a href="/why-it-matters">Why it matters</a>
 </nav>
 <div class="page-wrap">
   <img class="trail trail--l" src="/images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" />
