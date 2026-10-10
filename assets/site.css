@@ -1,4 +1,3 @@
-
   :root {
     --paper: #FBF3F2;
     --ink: #5C3A45;
@@ -1846,7 +1845,6 @@
     .ribbon-inner { gap: 8px; padding: 0 24px; }
     .ribbon-link { font-size: 0.98rem; padding: 13px 14px 11px; }
   }
-
 
 /* ---- Standalone section pages -------------------------------------------
    Each panel also exists at its own address. These rules give that page the

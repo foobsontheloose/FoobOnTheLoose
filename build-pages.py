@@ -205,10 +205,13 @@ def build(pid, slug, classes, inner):
 
 def main(only=None):
     h = slurp()
-    os.makedirs("assets", exist_ok=True)
-    css = extract_style(h) + PAGE_CSS
-    open("assets/site.css", "w", encoding="utf-8").write(css)
-    print("assets/site.css  %d bytes" % len(css))
+    # assets/site.css is now the stylesheet itself, shared by index.html and
+    # every generated page. It is no longer produced from an inline copy, so
+    # this only checks the standalone rules are still in it.
+    css = open("assets/site.css", encoding="utf-8").read()
+    if ".page-card" not in css:
+        raise SystemExit("assets/site.css is missing the .page-card rules")
+    print("assets/site.css  %d bytes (source, not regenerated)" % len(css))
 
     made = 0
     for pid, slug in SLUGS.items():
