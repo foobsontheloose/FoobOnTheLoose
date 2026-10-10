@@ -10,6 +10,14 @@
 # preview image, fetched by Facebook and iMessage, so it must deploy). Everything below is source material or a working
 # master that nothing on the page links to.
 
+# The repository itself. Cloudflare uploads the asset directory as-is, and
+# the directory is the project root, so .git was being shipped as part of
+# the website. On 2026-10-10 its pack file passed 25 MiB and every deploy
+# began failing with "Asset too large". It had been uploading all along.
+.git
+.git/*
+.gitignore
+
 build-trail.py
 wip/*
 wrangler.jsonc
