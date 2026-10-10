@@ -68,6 +68,14 @@ PAGE_CSS = """
   overflow: visible;
 }
 .page-card .tab-panel { display: block; }
+/* Buttons that became links on the standalone pages must not pick up link
+   styling: on the homepage these are pills and a back control, not text
+   links, and they should look identical here. */
+a.recon-opt, a.recon-back, a.tab-square, a.wall-shot, a.ribbon-link, a.panel-link.recon-opt {
+  text-decoration: none;
+}
+a.recon-opt:hover, a.recon-back:hover { text-decoration: none; }
+
 .page-home {
   display: block;
   max-width: 520px;
