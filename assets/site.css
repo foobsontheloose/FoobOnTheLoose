@@ -1871,9 +1871,12 @@
 }
 
 
-/* Standalone pages need navigation that works with no script at all, so
-   they do not reuse the homepage's hamburger dropdown. This is a plain bar
-   that wraps onto a second row on a narrow screen. */
+
+/* Section pages show their links outright rather than behind a hamburger.
+   Someone arriving here from a search has not seen the site before, and the
+   visible bar is what tells her there is more than the page she landed on.
+   The homepage keeps its hamburger: those visitors came looking. No script
+   is involved, so this cannot break. */
 .sa-nav {
   position: relative;
   z-index: 3;

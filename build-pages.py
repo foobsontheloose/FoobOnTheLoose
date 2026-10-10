@@ -39,6 +39,20 @@ SLUGS = {
     "recon-FlatClosure":  "reconstruction/flat-closure",
 }
 
+
+# The photo wall only appears on one page, so only that page carries the
+# overlay and the script that drives it. Without them the captions written
+# for all 18 photos would sit in the markup and never be shown.
+LIGHTBOX = """  <button type="button" class="lightbox" id="lightbox" aria-label="Close photo">
+    <span class="lightbox-inner">
+      <img id="lightbox-img" src="" alt="" />
+      <span class="lightbox-cap" id="lightbox-cap"></span>
+      <span class="lightbox-date" id="lightbox-date"></span>
+    </span>
+  </button>
+  <script src="/assets/lightbox.js"></script>
+"""
+
 PAGE_CSS = """
 /* ---- Standalone section pages -------------------------------------------
    Each panel also exists at its own address. These rules give that page the
@@ -54,32 +68,6 @@ PAGE_CSS = """
   overflow: visible;
 }
 .page-card .tab-panel { display: block; }
-/* Standalone pages need navigation that works with no script at all, so
-   they do not reuse the homepage's hamburger dropdown. This is a plain bar
-   that wraps onto a second row on a narrow screen. */
-.sa-nav {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px 20px;
-  padding: 14px 16px 10px;
-  background: rgba(251, 243, 242, 0.92);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  border-bottom: 1px solid rgba(201, 106, 133, 0.14);
-}
-.sa-nav a {
-  font-family: 'Nunito Sans', sans-serif;
-  font-weight: 700;
-  font-size: 0.92rem;
-  color: var(--ink);
-  text-decoration: none;
-  padding: 4px 2px;
-}
-.sa-nav a:hover { color: var(--rose-deep); }
-
 .page-home {
   display: block;
   max-width: 520px;
@@ -205,12 +193,12 @@ def build(pid, slug, classes, inner):
 </head>
 <body class="standalone">
 <nav class="sa-nav" aria-label="Sections">
-    <a href="/#howto">Self-exam</a>
-    <a href="/know-the-signs">Know the signs</a>
-    <a href="/screening">Screening</a>
-    <a href="/reconstruction">Reconstruction</a>
-    <a href="/support">Support</a>
-    <a href="/why-it-matters">Why it matters</a>
+  <a href="/#howto">Self-exam</a>
+  <a href="/know-the-signs">Know the signs</a>
+  <a href="/screening">Screening</a>
+  <a href="/reconstruction">Reconstruction</a>
+  <a href="/support">Support</a>
+  <a href="/why-it-matters">Why it matters</a>
 </nav>
 <div class="page-wrap">
   <img class="trail trail--l" src="/images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" />
@@ -220,9 +208,10 @@ def build(pid, slug, classes, inner):
   </main>
   <a class="page-home" href="/">&larr; Foobs On the Loose</a>
 </div>
-</body>
+{lightbox}</body>
 </html>
-""".format(title=_html.escape(full_title, quote=True),
+""".format(lightbox=LIGHTBOX if 'wall-shot' in inner else "",
+           title=_html.escape(full_title, quote=True),
            desc=_html.escape(desc, quote=True), site=SITE, slug=slug,
            classes=classes.replace(" recon-detail", " recon-detail"), inner=inner)
 

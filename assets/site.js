@@ -4,35 +4,6 @@
       if (y) y.textContent = new Date().getFullYear();
     })();
 
-    /* Hamburger menu, narrow screens only */
-    (function () {
-      var nav = document.querySelector('.ribbon-nav');
-      var toggle = document.getElementById('nav-toggle');
-      if (!nav || !toggle) return;
-
-      function setOpen(open) {
-        nav.classList.toggle('menu-open', open);
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      }
-
-      toggle.addEventListener('click', function () {
-        setOpen(!nav.classList.contains('menu-open'));
-      });
-
-      // Choosing a destination closes the menu behind you.
-      nav.querySelectorAll('.ribbon-link').forEach(function (link) {
-        link.addEventListener('click', function () { setOpen(false); });
-      });
-
-      document.addEventListener('click', function (e) {
-        if (!nav.contains(e.target)) setOpen(false);
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') setOpen(false);
-      });
-    })();
 
     (function () {
       var modal = document.getElementById('modal');
@@ -186,39 +157,6 @@
       }
     })();
 
-    /* Photo wall: tap a snapshot to see it full size */
-    (function () {
-      var box = document.getElementById('lightbox');
-      var img = document.getElementById('lightbox-img');
-      var cap = document.getElementById('lightbox-cap');
-      var dateEl = document.getElementById('lightbox-date');
-      if (!box || !img) return;
-      var lastFocused = null;
-
-      document.querySelectorAll('.wall-shot').forEach(function (shot) {
-        shot.addEventListener('click', function () {
-          lastFocused = shot;
-          var inner = shot.querySelector('img');
-          img.src = inner.src;
-          img.alt = inner.alt || '';
-          if (cap) cap.textContent = shot.getAttribute('data-caption') || '';
-          if (dateEl) dateEl.textContent = shot.getAttribute('data-date') || '';
-          box.classList.add('open');
-        });
-      });
-
-      function close() {
-        box.classList.remove('open');
-        // release the full-size image so it is not held in memory
-        setTimeout(function () { if (!box.classList.contains('open')) img.src = ''; }, 300);
-        if (lastFocused) lastFocused.focus();
-      }
-
-      box.addEventListener('click', close);
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && box.classList.contains('open')) close();
-      });
-    })();
 
     /* Page scroll cue: same control, same behaviour, for the page itself */
     (function () {
