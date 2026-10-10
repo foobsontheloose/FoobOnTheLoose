@@ -1,0 +1,194 @@
+#!/usr/bin/env python3
+"""Generate a standalone page for each panel in index.html.
+
+index.html stays the single source of truth. This reads it, lifts the
+stylesheet and each panel, and writes a real page per panel so every
+section has its own address. Run it after editing index.html.
+"""
+import html as _html
+import os
+import re
+
+SRC = "index.html"
+SITE = "https://foobsontheloose.com"
+
+# panel id -> url path (no leading slash, no extension)
+SLUGS = {
+    "panel-why":          "why-it-matters",
+    "panel-signs":        "know-the-signs",
+    "panel-screening":    "screening",
+    "panel-recon":        "reconstruction",
+    "panel-questions":    "questions-to-ask",
+    "panel-men":          "men",
+    "panel-support":      "support",
+    "panel-risk":         "know-your-risk",
+    "panel-about":        "about",
+    "panel-follow":       "follow",
+    "recon-Direct":       "reconstruction/direct-to-implant",
+    "recon-TEtoIMPLANT":  "reconstruction/tissue-expander",
+    "recon-DIEP":         "reconstruction/diep",
+    "recon-TRAM":         "reconstruction/tram",
+    "recon-PAP":          "reconstruction/pap",
+    "recon-SGAP":         "reconstruction/sgap",
+    "recon-IGAP":         "reconstruction/igap",
+    "recon-TUG":          "reconstruction/tug",
+    "recon-LAT":          "reconstruction/latissimus",
+    "recon-FatGrafting":  "reconstruction/fat-grafting",
+    "recon-ComboHybrid":  "reconstruction/combination",
+    "recon-NippleAreola": "reconstruction/nipple-areola",
+    "recon-FlatClosure":  "reconstruction/flat-closure",
+}
+
+PAGE_CSS = """
+/* ---- Standalone section pages -------------------------------------------
+   Each panel also exists at its own address. These rules give that page the
+   same card the modal uses, without the modal's overlay behaviour. */
+.page-wrap { padding: 92px 18px 60px; position: relative; z-index: 1; }
+/* The card carries .modal-card too, so it inherits that element's width,
+   padding and radius at every breakpoint and cannot drift from it. These
+   rules undo only the parts that exist because it is normally an overlay. */
+.page-card {
+  margin: 0 auto;
+  transform: none;
+  max-height: none;
+  overflow: visible;
+}
+.page-card .tab-panel { display: block; }
+.page-home {
+  display: block;
+  max-width: 520px;
+  margin: 22px auto 0;
+  text-align: center;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--rose-deep);
+}
+"""
+
+
+def slurp():
+    return open(SRC, encoding="utf-8").read()
+
+
+def extract_style(h):
+    m = re.search(r"<style>(.*?)</style>", h, re.S)
+    return m.group(1)
+
+
+def extract_panel(h, pid):
+    m = re.search(r'<div class="([^"]*)" id="%s"[^>]*>' % re.escape(pid), h)
+    if not m:
+        raise SystemExit("panel not found: " + pid)
+    i, depth = m.end(), 1
+    tag = re.compile(r"<(/?)div\b[^>]*>")
+    while depth and i < len(h):
+        t = tag.search(h, i)
+        if not t:
+            break
+        depth += -1 if t.group(1) else 1
+        i = t.end()
+    return m.group(1), h[m.end():i - len("</div>")]
+
+
+def text_of(frag):
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", frag)).strip()
+
+
+def build(pid, slug, classes, inner):
+    depth = slug.count("/")
+    root = "/" if depth == 0 else "/"          # absolute paths throughout
+
+    heading = re.search(r"<h2[^>]*>(.*?)</h2>", inner, re.S)
+    title = text_of(heading.group(1)) if heading else slug
+
+    body = re.search(r'<p class="(?:recon-body|about-body|lede)"[^>]*>(.*?)</p>', inner, re.S)
+    desc = text_of(body.group(1)) if body else ""
+    if len(desc) > 155:
+        desc = desc[:152].rsplit(" ", 1)[0] + "..."
+
+    # the in-modal back button becomes a real link
+    inner = re.sub(
+        r'<button type="button" class="recon-back" data-panel="panel-recon">(.*?)</button>',
+        r'<a class="recon-back" href="/reconstruction">\1</a>', inner, flags=re.S)
+    # any remaining panel triggers become links
+    def to_link(m):
+        target = m.group(1)
+        return '<a class="panel-link" href="/%s">' % SLUGS.get(target, "")
+    inner = re.sub(r'<button type="button" class="panel-link" data-goto="([^"]+)">', to_link, inner)
+    inner = re.sub(r"</button>", "</a>", inner) if 'class="panel-link" href' in inner else inner
+    # images and links resolve from any depth
+    inner = inner.replace('src="images/', 'src="/images/')
+
+    full_title = "%s &mdash; Foobs On the Loose" % title
+    return """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<meta name="description" content="{desc}">
+<meta name="theme-color" content="#C96A85">
+<link rel="canonical" href="{site}/{slug}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Foobs On the Loose">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{desc}">
+<meta property="og:url" content="{site}/{slug}">
+<meta property="og:image" content="{site}/images/share-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{site}/images/share-card.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="standalone">
+<nav class="ribbon-nav" aria-label="Jump to a section">
+  <div class="ribbon-inner is-open">
+    <a class="ribbon-link" href="/#howto">Self-exam</a>
+    <a class="ribbon-link" href="/know-the-signs">Know the signs</a>
+    <a class="ribbon-link" href="/screening">Screening</a>
+    <a class="ribbon-link" href="/reconstruction">Reconstruction</a>
+    <a class="ribbon-link" href="/support">Support</a>
+    <a class="ribbon-link" href="/why-it-matters">Why it matters</a>
+  </div>
+</nav>
+<div class="page-wrap">
+  <img class="trail trail--l" src="/images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" />
+  <img class="trail trail--r" src="/images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" />
+  <main class="modal-card page-card">
+    <div class="{classes}">{inner}</div>
+  </main>
+  <a class="page-home" href="/">&larr; Foobs On the Loose</a>
+</div>
+</body>
+</html>
+""".format(title=_html.escape(full_title, quote=True).replace("&amp;mdash;", "&mdash;"),
+           desc=_html.escape(desc, quote=True), site=SITE, slug=slug,
+           classes=classes.replace(" recon-detail", " recon-detail"), inner=inner)
+
+
+def main(only=None):
+    h = slurp()
+    os.makedirs("assets", exist_ok=True)
+    css = extract_style(h) + PAGE_CSS
+    open("assets/site.css", "w", encoding="utf-8").write(css)
+    print("assets/site.css  %d bytes" % len(css))
+
+    made = 0
+    for pid, slug in SLUGS.items():
+        if only and pid != only:
+            continue
+        classes, inner = extract_panel(h, pid)
+        page = build(pid, slug, classes.replace(" hidden", ""), inner)
+        path = slug + ".html"
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+        open(path, "w", encoding="utf-8").write(page)
+        print("  %-34s %6d bytes   /%s" % (path, len(page), slug))
+        made += 1
+    print("%d page(s)" % made)
+
+
+if __name__ == "__main__":
+    import sys
+    main(sys.argv[1] if len(sys.argv) > 1 else None)

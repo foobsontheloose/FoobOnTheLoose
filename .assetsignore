@@ -76,3 +76,6 @@ images/*_1_201_a.heic
 images/*_1_105_c.jpeg
 images/_converted_heic.jpeg
 images/*_1_105_c 2.jpeg
+
+# Generator for the standalone section pages. Source, not served.
+build-pages.py
