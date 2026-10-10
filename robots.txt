@@ -1,0 +1,7 @@
+# Foobs On the Loose - breast self-exam and reconstruction information.
+# Everything here is free and meant to be found. Crawl all of it.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://foobsontheloose.com/sitemap.xml
