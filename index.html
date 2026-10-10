@@ -2759,6 +2759,52 @@
       // snapping to the top loses the option they were just reading about.
       var listScroll = 0;
 
+      /* Every panel also exists as a real page at its own address, generated
+         by build-pages.py. Opening one here updates the address bar to match,
+         so the view can be shared and the back button steps through panels
+         instead of leaving the site. The modal behaves as it always has; if
+         this script never runs, the links still reach real pages. */
+      var PANEL_URLS = {
+        'panel-why': '/why-it-matters',
+        'panel-signs': '/know-the-signs',
+        'panel-screening': '/screening',
+        'panel-recon': '/reconstruction',
+        'panel-questions': '/questions-to-ask',
+        'panel-men': '/men',
+        'panel-support': '/support',
+        'panel-risk': '/know-your-risk',
+        'panel-about': '/about',
+        'panel-follow': '/follow',
+        'recon-Direct': '/reconstruction/direct-to-implant',
+        'recon-TEtoIMPLANT': '/reconstruction/tissue-expander',
+        'recon-DIEP': '/reconstruction/diep',
+        'recon-TRAM': '/reconstruction/tram',
+        'recon-PAP': '/reconstruction/pap',
+        'recon-SGAP': '/reconstruction/sgap',
+        'recon-IGAP': '/reconstruction/igap',
+        'recon-TUG': '/reconstruction/tug',
+        'recon-LAT': '/reconstruction/latissimus',
+        'recon-FatGrafting': '/reconstruction/fat-grafting',
+        'recon-ComboHybrid': '/reconstruction/combination',
+        'recon-NippleAreola': '/reconstruction/nipple-areola',
+        'recon-FlatClosure': '/reconstruction/flat-closure'
+      };
+      var URL_PANELS = {};
+      Object.keys(PANEL_URLS).forEach(function (k) { URL_PANELS[PANEL_URLS[k]] = k; });
+      var replayingHistory = false;
+
+      function syncUrl(path) {
+        if (replayingHistory) return;
+        if (location.pathname !== path) history.pushState({ path: path }, '', path);
+      }
+
+      window.addEventListener('popstate', function () {
+        var id = URL_PANELS[location.pathname.replace(/\/+$/, '') || '/'];
+        replayingHistory = true;
+        if (id) { openPanel(id); } else { closeModal(); }
+        replayingHistory = false;
+      });
+
       function openPanel(panelId) {
         var reconList = document.getElementById('panel-recon');
         var leavingList = reconList && !reconList.hidden;
@@ -2781,6 +2827,7 @@
         void card.scrollHeight;
         card.scrollTop = (panelId === 'panel-recon') ? listScroll : 0;
         requestAnimationFrame(updateCue);
+        syncUrl(PANEL_URLS[panelId] || '/');
       }
 
       // The cue points down while there is more below and flips to point up at
@@ -2815,6 +2862,7 @@
         modal.classList.remove('open');
         document.body.classList.remove('panel-open');
         document.body.style.overflow = '';
+        syncUrl('/');
       }
 
       document.querySelectorAll('[data-panel]').forEach(function (el) {

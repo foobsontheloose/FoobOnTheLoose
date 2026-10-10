@@ -91,7 +91,9 @@ def extract_panel(h, pid):
 
 
 def text_of(frag):
-    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", frag)).strip()
+    """Plain text from a fragment. Entities are decoded here so the caller can
+    escape once; escaping already-escaped text gave "Screening &amp;amp; ..."."""
+    return _html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", frag)).strip())
 
 
 def build(pid, slug, classes, inner):
@@ -107,19 +109,52 @@ def build(pid, slug, classes, inner):
         desc = desc[:152].rsplit(" ", 1)[0] + "..."
 
     # the in-modal back button becomes a real link
+    # the in-modal back button becomes a real link, and says where it goes:
+    # in the modal "All options" is obvious from context, on its own page it is not
     inner = re.sub(
-        r'<button type="button" class="recon-back" data-panel="panel-recon">(.*?)</button>',
-        r'<a class="recon-back" href="/reconstruction">\1</a>', inner, flags=re.S)
-    # any remaining panel triggers become links
-    def to_link(m):
-        target = m.group(1)
-        return '<a class="panel-link" href="/%s">' % SLUGS.get(target, "")
-    inner = re.sub(r'<button type="button" class="panel-link" data-goto="([^"]+)">', to_link, inner)
-    inner = re.sub(r"</button>", "</a>", inner) if 'class="panel-link" href' in inner else inner
+        r'<button type="button" class="recon-back" data-panel="panel-recon">.*?</button>',
+        '<a class="recon-back" href="/reconstruction">&lsaquo; All reconstruction options</a>',
+        inner, flags=re.S)
+    # Every remaining panel trigger is a <button> that only works with the
+    # modal script. On a standalone page it has to be a real link, so the
+    # button becomes an <a> carrying the same classes, and its matching
+    # </button> becomes </a>. Done by walking the string so nested markup
+    # inside a button does not confuse the pairing.
+    def buttons_to_links(frag):
+        out, i = [], 0
+        trigger = re.compile(r'<button\b[^>]*?data-(?:panel|goto)="([^"]+)"[^>]*>')
+        closer = re.compile(r'</?button\b[^>]*>')
+        while True:
+            m = trigger.search(frag, i)
+            if not m:
+                out.append(frag[i:])
+                break
+            out.append(frag[i:m.start()])
+            target = m.group(1)
+            href = "/" + SLUGS[target] if target in SLUGS else "/"
+            cls = re.search(r'class="([^"]*)"', m.group(0))
+            out.append('<a class="%s" href="%s">' % (cls.group(1) if cls else "", href))
+            # find this button's own closing tag, accounting for nesting
+            j, depth = m.end(), 1
+            while depth:
+                c = closer.search(frag, j)
+                if not c:
+                    break
+                depth += -1 if c.group(0).startswith("</") else 1
+                if depth == 0:
+                    out.append(frag[m.end():c.start()])
+                    out.append("</a>")
+                    j = c.end()
+                    break
+                j = c.end()
+            i = j
+        return "".join(out)
+
+    inner = buttons_to_links(inner)
     # images and links resolve from any depth
     inner = inner.replace('src="images/', 'src="/images/')
 
-    full_title = "%s &mdash; Foobs On the Loose" % title
+    full_title = "%s \u2014 Foobs On the Loose" % title
     return """<!doctype html>
 <html lang="en">
 <head>
@@ -163,7 +198,7 @@ def build(pid, slug, classes, inner):
 </div>
 </body>
 </html>
-""".format(title=_html.escape(full_title, quote=True).replace("&amp;mdash;", "&mdash;"),
+""".format(title=_html.escape(full_title, quote=True),
            desc=_html.escape(desc, quote=True), site=SITE, slug=slug,
            classes=classes.replace(" recon-detail", " recon-detail"), inner=inner)
 
