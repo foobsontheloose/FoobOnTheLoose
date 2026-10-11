@@ -2157,11 +2157,3 @@ body.panel-open {
   font-weight: 700;
   color: #3A2630;
 }
-
-.signs-list li.key::before {
-  width: 10px;
-  height: 10px;
-  top: 6px;
-  left: -1px;
-  box-shadow: 0 0 0 3px rgba(214, 141, 161, 0.28);
-}
