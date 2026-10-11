@@ -575,10 +575,17 @@
     transform: translateY(0) scale(1);
   }
 
+  /* Sticky rather than absolute, the same trick the scroll cue uses: the
+     card is the scrolling container, so absolute pinned the cross to the top
+     of the content and it scrolled away. On a long panel the reader had to
+     scroll all the way back up to find it. Floated right with a negative
+     bottom margin so it rides along without taking up a line. */
   .modal-close {
-    position: absolute;
+    position: sticky;
     top: 12px;
-    right: 12px;
+    float: right;
+    margin: 0 -4px -38px 0;
+    z-index: 4;
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -1927,3 +1934,16 @@ body.panel-open {
    rather than carrying on into the page behind it */
 .modal-card { overscroll-behavior: contain; }
 .modal-backdrop { overscroll-behavior: none; }
+
+/* The panel heading stays put while its content scrolls under it, which
+   gives the close cross somewhere to live. Sticky on its own would let text
+   show through, so it carries the card's background; the symmetric padding
+   keeps the heading centred while leaving the cross clear of it. */
+.tab-panel > h2 {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--paper);
+  padding: 14px 46px 10px;
+  margin-top: 0;
+}
