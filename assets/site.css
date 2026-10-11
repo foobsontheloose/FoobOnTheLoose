@@ -1174,11 +1174,10 @@
     transition: color 0.15s ease;
   }
 
-  /* Fade the words, not the element. Once this link became the sticky
-     header it started carrying the card's background, and fading the whole
-     element faded that too - so hovering it made the diagram scrolled
-     underneath show straight through the header. */
-  .recon-back:hover { color: var(--rose); }
+  /* Never fade this element. It carries the sticky header's background, so
+     fading it fades that too and the diagram scrolled underneath shows
+     straight through the top of the panel. The hover is a pill behind the
+     label instead - see .recon-back > span at the end of this file. */
 
   /* A mat around the diagram. Nine of them open with a coloured header band
      whose text sits 14-32px from the image edge, which reads as cramped when
@@ -2228,3 +2227,21 @@ body.panel-open {
 #modal > .modal-card.fits {
   overflow-y: hidden;
 }
+
+/* The back label gets the same treatment as the close cross: a soft pill on
+   hover, rather than a fade. The link itself is full width - that is what
+   carries the sticky header's background - so tinting it would band the
+   whole strip. The label wraps instead, and its negative margins cancel its
+   own padding so the pill appears around the words without moving them or
+   changing the header's height, which the heading's sticky offset depends
+   on. */
+
+.recon-back > span {
+  display: inline-block;
+  margin: -5px -11px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.recon-back:hover > span { background: var(--petal); }

@@ -145,7 +145,8 @@ def build(pid, slug, classes, inner):
         aria = re.search(r'aria-label="([^"]*)"', tag)
         href = "/" + SLUGS[tgt.group(1)] if tgt and tgt.group(1) in SLUGS else "/"
         label = ' aria-label="%s"' % aria.group(1) if aria else ""
-        return '<a class="recon-back" href="%s"%s>&lsaquo; Back</a>' % (href, label)
+        return ('<a class="recon-back" href="%s"%s>'
+                '<span>&lsaquo; Back</span></a>') % (href, label)
 
     inner = re.sub(
         r'<button type="button" class="recon-back"[^>]*>.*?</button>',
