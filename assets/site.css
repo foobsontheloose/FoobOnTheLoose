@@ -2120,6 +2120,18 @@ body.panel-open {
      The text-size-adjust stops iOS inflating the type on top of that. */
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
+  /* One column on paper, whatever the screen was doing. On a wide screen
+     the questions sit two across to cut the page height, and printing from
+     a Mac carried that onto the sheet - three pages there against five from
+     a phone, the same list in two different shapes. A printed question also
+     needs a full-width line under it, because someone is writing a
+     surgeon's answer on it by hand. */
+  .signs-list {
+    display: block !important;
+    grid-template-columns: none !important;
+    columns: auto !important;
+  }
+
   /* Safari prints backdrop-filter as a solid black rectangle - a WebKit
      bug of long standing, and it does it even when the element is hidden.
      The frosted nav bar was coming out as a black bar across the top of
