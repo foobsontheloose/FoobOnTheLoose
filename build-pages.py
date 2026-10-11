@@ -121,6 +121,38 @@ def text_of(frag):
     return _html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", frag)).strip())
 
 
+def site_footer(h):
+    """The homepage's own footer, rewritten to work on a page with no script.
+
+    These pages are where Google sends people, and until now they ended with
+    a single link back to the homepage - so a woman who arrived at TRAM flap
+    had no way of learning that the site also holds the questions to take to
+    her surgeon, or a monthly reminder she could set. The footer is lifted
+    from index.html rather than copied into this file, so it cannot drift
+    from the homepage's.
+    """
+    foot = h[h.rindex("<footer>"):]
+    foot = foot[:foot.index("</footer>") + len("</footer>")]
+
+    # panel triggers become real addresses
+    def panel(m):
+        pid = m.group(1)
+        if pid not in SLUGS:
+            return m.group(0)
+        return '<a class="sitemap-link" href="/%s">' % SLUGS[pid]
+    foot = re.sub(r'<button type="button" class="sitemap-link" data-panel="([^"]+)">', panel, foot)
+
+    # the reminder is built in JavaScript, which these pages do not load, so
+    # it points at the calendar badge on the homepage instead
+    foot = foot.replace('<button type="button" class="sitemap-link" data-cal>',
+                        '<a class="sitemap-link" href="/#cal-btn">')
+    foot = foot.replace("</button>", "</a>")
+
+    # anchors on the homepage need the homepage in front of them
+    foot = foot.replace('href="#', 'href="/#')
+    return foot
+
+
 def build(pid, slug, classes, inner):
     depth = slug.count("/")
     root = "/" if depth == 0 else "/"          # absolute paths throughout
@@ -218,11 +250,20 @@ def build(pid, slug, classes, inner):
 <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body class="standalone">
+<a class="sa-brand" href="/" aria-label="Foobs On the Loose - home">
+  <svg class="brand-flourish" viewBox="0 0 120 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M6 14 C 30 4, 44 4, 56 11" fill="none" stroke="var(--rose)" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M114 14 C 90 4, 76 4, 64 11" fill="none" stroke="var(--rose)" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M60 4 C 55 8, 55 14, 60 17 C 65 14, 65 8, 60 4 Z" fill="var(--rose-deep)"/>
+  </svg>
+  <span class="sa-brand-name">Foobs<span>On The Loose</span></span>
+</a>
 <nav class="sa-nav" aria-label="Sections">
   <a href="/#howto">Self-exam</a>
   <a href="/know-the-signs">Know the signs</a>
   <a href="/screening">Screening</a>
   <a href="/reconstruction">Reconstruction</a>
+  <a href="/questions-to-ask">Questions to ask</a>
   <a href="/support">Support</a>
   <a href="/why-it-matters">Why it matters</a>
 </nav>
@@ -234,9 +275,11 @@ def build(pid, slug, classes, inner):
   </main>
   <a class="page-home" href="/">&larr; Foobs On the Loose</a>
 </div>
+{footer}
 {lightbox}</body>
 </html>
 """.format(lightbox=LIGHTBOX if 'wall-shot' in inner else "",
+           footer=site_footer(slurp()),
            title=_html.escape(full_title, quote=True),
            desc=_html.escape(desc, quote=True), site=SITE, slug=slug,
            classes=classes.replace(" recon-detail", " recon-detail"), inner=inner)
