@@ -548,6 +548,7 @@
   }
 
   .modal-card {
+    --card-top: 34px;
     position: relative;
     background: var(--paper);
     border-radius: 26px;
@@ -585,7 +586,7 @@
     top: 12px;
     float: right;
     margin: 0 -4px -38px 0;
-    z-index: 4;
+    z-index: 6;
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -1502,7 +1503,7 @@
     /* Smallest phones: pull the flowers further off-edge so they frame
        Foobie rather than crowding him. */
     :root { --petal-w: 96px; --petal-inset: -38px; }
-    .modal-card { padding: 30px 18px 24px; border-radius: 20px; }
+    .modal-card { --card-top: 30px; padding: 30px 18px 24px; border-radius: 20px; }
     .tab-grid { gap: 10px; }
     .tab-label { font-size: 0.84rem; }
   }
@@ -1550,7 +1551,7 @@
     .step-text h3 { font-size: 1.45rem; }
     .step-text p { font-size: 1.02rem; }
 
-    .modal-card { padding: 38px 40px 32px; max-width: 680px; }
+    .modal-card { --card-top: 38px; padding: 38px 40px 32px; max-width: 680px; }
     .tab-panel h2 { font-size: 1.8rem; }
     .stat .num { font-size: 2.3rem; }
     .stat .label { font-size: 0.88rem; }
@@ -1577,7 +1578,7 @@
     .tabs-section { padding: 16px 24px 90px; }
     .tab-square:hover { transform: translateY(-4px); }
 
-    .modal-card { max-width: 880px; padding: 42px 56px 36px; }
+    .modal-card { --card-top: 42px; max-width: 880px; padding: 42px 56px 36px; }
 
     /* use the extra width to cut height */
     .signs-list {
@@ -1935,15 +1936,50 @@ body.panel-open {
 .modal-card { overscroll-behavior: contain; }
 .modal-backdrop { overscroll-behavior: none; }
 
-/* The panel heading stays put while its content scrolls under it, which
-   gives the close cross somewhere to live. Sticky on its own would let text
-   show through, so it carries the card's background; the symmetric padding
-   keeps the heading centred while leaving the cross clear of it. */
-.tab-panel > h2 {
+
+/* ---- The panel header stays put -----------------------------------------
+   The card is the scrolling container, so an absolutely positioned close
+   cross scrolled away with the content and a reader on a long panel had to
+   scroll back up to find it. The header now sticks instead, carrying the
+   card's own background so content passes cleanly underneath, and it pulls
+   up into the card's top padding so nothing shows above it. The side padding
+   is symmetric, which keeps the heading centred while clearing the cross. */
+
+.tab-panel > h2:first-child {
   position: sticky;
   top: 0;
   z-index: 3;
   background: var(--paper);
-  padding: 14px 46px 10px;
-  margin-top: 0;
+  padding: var(--card-top, 34px) 38px 10px;
 }
+
+/* A reconstruction detail leads with its back link, so that sits at the top
+   of the sticky header and the heading sticks directly beneath it. */
+.recon-detail > .recon-back {
+  position: sticky;
+  top: 0;
+  z-index: 4; /* below the close cross at 6, above the heading at 3 */
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--paper);
+  padding: var(--card-top, 34px) 38px 4px 0;
+}
+
+.recon-detail > h2 {
+  position: sticky;
+  /* directly beneath the back link, whose height is the card's top padding
+     plus its own line and 4px below it */
+  top: calc(var(--card-top, 34px) + 23px);
+  z-index: 3;
+  background: var(--paper);
+  margin-top: 0;
+  padding: 2px 38px 10px;
+}
+
+/* A sticky element inside a scrolling box sticks below that box's padding,
+   not at its visible edge - so with padding-top on the card there was a gap
+   where content showed above the header. The header carries that padding
+   instead. Every panel begins with a heading or a back link, both of which
+   do. The calendar card keeps its own padding. */
+#modal > .modal-card { padding-top: 0; }
