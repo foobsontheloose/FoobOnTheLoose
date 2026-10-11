@@ -1171,10 +1171,14 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--rose-deep);
-    transition: opacity 0.15s ease;
+    transition: color 0.15s ease;
   }
 
-  .recon-back:hover { opacity: 0.7; }
+  /* Fade the words, not the element. Once this link became the sticky
+     header it started carrying the card's background, and fading the whole
+     element faded that too - so hovering it made the diagram scrolled
+     underneath show straight through the header. */
+  .recon-back:hover { color: var(--rose); }
 
   /* A mat around the diagram. Nine of them open with a coloured header band
      whose text sits 14-32px from the image edge, which reads as cramped when
