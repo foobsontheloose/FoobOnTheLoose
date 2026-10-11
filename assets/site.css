@@ -643,7 +643,7 @@
      area without needing to know the card's size. */
   .scroll-cue {
     position: sticky;
-    top: calc(88dvh - 96px);
+    top: calc(88dvh - 64px);
     float: right;
     z-index: 3;
     margin: 0 -4px -40px 0;
@@ -2185,9 +2185,16 @@ body.panel-open {
    and only those get the room. */
 
 #modal > .modal-card.can-scroll {
-  /* 96px clears the cue, plus a visible gap so the last line is not
-     resting against it. */
-  padding-bottom: 124px;
+  /* At the foot of the scroll the cue settles exactly this far above the
+     card's bottom edge, and the last line of text settles level with the
+     top of it - so the padding does not open a gap above the cue, it moves
+     the cue and the text down together and leaves the remainder as blank
+     space underneath. Measured rather than reasoned about: the blank left
+     under the cue comes to its own top offset minus its 40px height, and
+     the references stay clear as long as the padding matches that offset.
+     So the cue was moved down from 96px to 64px and the padding with it,
+     which took the dead space at the foot of a panel from 84px to 30px. */
+  padding-bottom: 70px;
 }
 
 /* ---- Where to start -----------------------------------------------------
@@ -2207,4 +2214,13 @@ body.panel-open {
 .signs-list li.key {
   font-weight: 700;
   color: #3A2630;
+}
+
+/* A panel that all but fits does not scroll at all. Without this it slides
+   a few pixels under a finger and springs back, which reads as the card
+   being loose rather than as content continuing. Only applies below the
+   threshold that earns a scroll cue, so nothing a reader needs is hidden:
+   what gets clipped is the tail of the card's own bottom padding. */
+#modal > .modal-card.fits {
+  overflow-y: hidden;
 }

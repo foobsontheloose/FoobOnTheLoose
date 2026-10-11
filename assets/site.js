@@ -113,9 +113,27 @@
       // whichever way it is pointing.
       var cue = document.getElementById('scroll-cue');
 
+      // Space the card reserves at its foot for the cue to rest in, which
+      // only exists while the cue does. Keep in sync with the padding-bottom
+      // on #modal > .modal-card.can-scroll.
+      var CUE_ROOM = 70;
+
       function updateCue() {
         if (!cue) return;
-        var scrollable = card.scrollHeight - card.clientHeight > 24;
+        // Measure the content itself, not the room the cue is standing in.
+        // Without this a panel that overflows by a hair gets a cue, the cue
+        // adds 68px of padding, and the panel now overflows by plenty - the
+        // cue arguing itself into existence. Subtracting the reserved space
+        // means the same number is measured whether the cue is there or not,
+        // so a panel that does not really need to scroll never gets one.
+        var reserved = card.classList.contains('can-scroll') ? CUE_ROOM : 0;
+        var scrollable = card.scrollHeight - card.clientHeight - reserved > 24;
+        // A panel that is a dozen pixels too tall should not move at all.
+        // It has no cue, nothing worth reading is below the fold, and all
+        // the drag does is make the card feel loose. Anything it clips is
+        // inside the card's own bottom padding, which is 24px at its
+        // smallest - the same number as the threshold.
+        card.classList.toggle('fits', !scrollable);
         var atEnd = card.scrollHeight - card.scrollTop - card.clientHeight <= 24;
         card.classList.toggle('can-scroll', scrollable);
         cue.classList.toggle('at-end', scrollable && atEnd);
