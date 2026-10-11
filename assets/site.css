@@ -1907,3 +1907,23 @@ a.recon-opt, a.recon-back, a.tab-square, a.wall-shot, a.ribbon-link, a.panel-lin
   text-decoration: none;
 }
 a.recon-opt:hover, a.recon-back:hover { text-decoration: none; }
+
+/* Freezing the page behind an open panel.
+   body { overflow: hidden } never worked here: the scrolling element is
+   <html>, not <body>, so the page scrolled on happily behind the modal.
+   Pinning the body with position:fixed takes it out of the scroll flow
+   entirely, which also holds on iOS where overflow:hidden is ignored.
+   The offset is stored in --page-lock-top and restored on close. */
+body.panel-open {
+  position: fixed;
+  top: var(--page-lock-top, 0);
+  left: 0;
+  right: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* and once the card itself reaches its end, the gesture stops there
+   rather than carrying on into the page behind it */
+.modal-card { overscroll-behavior: contain; }
+.modal-backdrop { overscroll-behavior: none; }

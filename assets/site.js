@@ -1,3 +1,22 @@
+    /* One place that freezes and restores the page behind any overlay. */
+    var pageLockY = 0, pageLocked = false;
+    function lockPage() {
+      if (pageLocked) return;
+      pageLockY = window.scrollY || document.documentElement.scrollTop || 0;
+      document.body.style.setProperty('--page-lock-top', (-pageLockY) + 'px');
+      document.body.classList.add('panel-open');
+      pageLocked = true;
+    }
+    function unlockPage() {
+      if (!pageLocked) return;
+      document.body.classList.remove('panel-open');
+      document.body.style.removeProperty('--page-lock-top');
+      // the page has smooth scrolling; restoring must be instant or the
+      // reader watches it glide back after closing a panel
+      window.scrollTo({ top: pageLockY, left: 0, behavior: 'instant' });
+      pageLocked = false;
+    }
+
     /* Footer year — always current */
     (function () {
       var y = document.getElementById('year');
@@ -77,8 +96,7 @@
         closeBtn.innerHTML = isDetail ? '&lsaquo;' : '&times;';
         closeBtn.setAttribute('aria-label', isDetail ? 'Back to all options' : 'Close');
         modal.classList.add('open');
-        document.body.classList.add('panel-open');
-        document.body.style.overflow = 'hidden';
+        lockPage();
         // reading scrollHeight forces layout, so the restored offset is not
         // clamped against the height of the panel we just left
         void card.scrollHeight;
@@ -117,8 +135,7 @@
         // a fresh visit to the list starts at the top again
         listScroll = 0;
         modal.classList.remove('open');
-        document.body.classList.remove('panel-open');
-        document.body.style.overflow = '';
+        unlockPage();
         syncUrl('/');
       }
 
@@ -276,12 +293,12 @@
         if (made.isBlob) lastIcsUrl = made.url;
 
         calModal.classList.add('open');
-        document.body.style.overflow = 'hidden';
+        lockPage();
       }
 
       function closeCal() {
         calModal.classList.remove('open');
-        document.body.style.overflow = '';
+        unlockPage();
       }
 
       if (btn) btn.addEventListener('click', openCal);
