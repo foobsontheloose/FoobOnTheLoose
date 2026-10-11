@@ -1,7 +1,7 @@
 {
   // Static site: Cloudflare serves the files in this repo as-is. There is no
   // build step, so "assets" points at the project root and nothing compiles.
-  "name": "foobsontheloose-site",
+  "name": "foobontheloose",
   "compatibility_date": "2026-09-18",
   "assets": {
     "directory": "./"
