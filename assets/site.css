@@ -2120,6 +2120,16 @@ body.panel-open {
      The text-size-adjust stops iOS inflating the type on top of that. */
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
+  /* Safari prints backdrop-filter as a solid black rectangle - a WebKit
+     bug of long standing, and it does it even when the element is hidden.
+     The frosted nav bar was coming out as a black bar across the top of
+     the first sheet. Nothing on paper has anything to blur behind it, so
+     all of it goes. */
+  *, *::before, *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
   body {
     width: 660px !important;
     max-width: 660px !important;
