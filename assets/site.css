@@ -2245,6 +2245,10 @@ body.panel-open {
   margin: -9.5px -11px;
   padding: 9.5px 11px;
   border-radius: 999px;
+  /* Same resting state as the cross, and the same move on hover: it sits
+     in petal-soft and darkens to petal, over the same 0.15s. The cross was
+     never a control that appears when pointed at, so neither is this. */
+  background: var(--petal-soft);
   /* ...and this lines the two up. The cross sits 12px down and is 38px
      tall, so its centre is always 31px from the top of the card. The
      pill's centre lands at the header's top padding plus 9.5px whatever
