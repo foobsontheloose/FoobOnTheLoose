@@ -90,11 +90,12 @@
         panels.forEach(function (p) {
           p.hidden = (p.id !== panelId);
         });
-        // the corner control backs out one level inside a detail view,
-        // so show a back chevron there instead of a close cross
-        var isDetail = /^recon-/.test(panelId) && panelId !== 'panel-recon';
-        closeBtn.innerHTML = isDetail ? '&lsaquo;' : '&times;';
-        closeBtn.setAttribute('aria-label', isDetail ? 'Back to all options' : 'Close');
+        // The corner control means the same thing on every panel: close.
+        // Going back a level is the "All options" link at the top left, so
+        // each control does one job, the corner behaves the same everywhere,
+        // and leaving a detail takes one tap rather than backing out first.
+        closeBtn.innerHTML = '&times;';
+        closeBtn.setAttribute('aria-label', 'Close');
         modal.classList.add('open');
         lockPage();
         // reading scrollHeight forces layout, so the restored offset is not
@@ -151,27 +152,15 @@
         });
       });
 
-      closeBtn.addEventListener('click', dismiss);
+      closeBtn.addEventListener('click', closeModal);
 
       modal.addEventListener('click', function (e) {
-        if (e.target === modal) dismiss();
+        if (e.target === modal) closeModal();
       });
 
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') dismiss();
+        if (e.key === 'Escape') closeModal();
       });
-
-      // Inside a reconstruction detail, backing out returns to the list
-      // rather than dumping the person all the way back to the page.
-      function dismiss() {
-        var open = null;
-        panels.forEach(function (p) { if (!p.hidden) open = p; });
-        if (open && open.classList.contains('recon-detail')) {
-          openPanel('panel-recon');
-        } else {
-          closeModal();
-        }
-      }
     })();
 
 
