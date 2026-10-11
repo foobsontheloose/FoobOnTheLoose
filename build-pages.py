@@ -200,6 +200,10 @@ def build(pid, slug, classes, inner):
 <meta name="description" content="{desc}">
 <meta name="theme-color" content="#C96A85">
 <link rel="canonical" href="{site}/{slug}">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/icon-16.png">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Foobs On the Loose">
 <meta property="og:title" content="{title}">
