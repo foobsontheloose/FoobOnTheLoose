@@ -1104,7 +1104,7 @@
     background: var(--petal-soft);
     padding: 14px 16px;
     border-radius: 12px;
-    margin: 0 0 18px;
+    margin: 0 auto 18px;
   }
 
   .signs-list strong { font-weight: 800; color: var(--rose-deep); }
@@ -1154,7 +1154,7 @@
     font-size: 0.8rem;
     color: #A38792;
     line-height: 1.5;
-    margin: 26px 0 0;
+    margin: 26px auto 0;
     text-align: center;
   }
 
@@ -1218,7 +1218,7 @@
   }
 
   .recon-body {
-    margin: 0;
+    margin: 0 auto;
     color: #4B3540;
     font-size: 0.97rem;
     line-height: 1.65;
@@ -2321,3 +2321,10 @@ body.panel-open {
 }
 
 .recon-back:hover > span { background: var(--petal); }
+
+/* Running text is capped at 68 characters so a line stays readable while the
+   card stays wide enough for the diagrams. That cap is meant to sit centred -
+   the rule that sets it says so - but three classes set a margin shorthand
+   afterwards and silently wiped the auto margins, so every spare pixel piled
+   up on the right and the text looked shoved against the left edge while the
+   diagram above it ran the full width. */
