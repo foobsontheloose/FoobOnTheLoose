@@ -2238,9 +2238,21 @@ body.panel-open {
 
 .recon-back > span {
   display: inline-block;
-  margin: -5px -11px;
-  padding: 5px 11px;
+  /* 9.5px makes the pill 38px tall - the same as the close cross, whose
+     size does not change at any breakpoint. The negative margins cancel
+     the padding, so the pill grows around the words without moving them
+     or changing the header's height. */
+  margin: -9.5px -11px;
+  padding: 9.5px 11px;
   border-radius: 999px;
+  /* ...and this lines the two up. The cross sits 12px down and is 38px
+     tall, so its centre is always 31px from the top of the card. The
+     pill's centre lands at the header's top padding plus 9.5px whatever
+     its own padding is, so the difference is a fixed sum and holds at
+     every breakpoint. Shifting it is visual only: the box stays where it
+     was, which the heading's sticky offset depends on. */
+  position: relative;
+  top: calc(21.5px - var(--card-top, 34px));
   transition: background 0.15s ease;
 }
 
