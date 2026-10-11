@@ -2108,8 +2108,38 @@ body.panel-open {
 
   html, body {
     background: #fff !important;
-    font-size: 11.5pt;
+    font-size: 10.5pt;
   }
+
+  /* Lay the sheet out at paper width, not at the width of whatever device
+     is printing it. iOS Safari prints the page as the phone has it - a
+     375px column - so every line holds about forty characters instead of
+     ninety, which roughly doubles the lines and doubles the paper. Giving
+     the body a fixed width makes the layout the same from a phone as from
+     a laptop. 660px fits inside both A4 and Letter at these margins.
+     The text-size-adjust stops iOS inflating the type on top of that. */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+  body {
+    width: 660px !important;
+    max-width: 660px !important;
+    margin: 0 auto !important;
+  }
+
+  /* The sources and the address belong together at the foot of the last
+     sheet. Left to itself the address was being pushed onto a sheet of its
+     own, so a reader got a whole page carrying nothing but a URL. */
+  .recon-src { break-after: avoid; page-break-after: avoid; }
+  .print-only {
+    break-before: avoid;
+    page-break-before: avoid;
+    margin: 6px 0 0;
+  }
+
+  /* Headings and group titles do not need the on-screen breathing room. */
+  h2 { margin-bottom: 6px !important; }
+  h3 { margin: 14px 0 6px !important; }
+  .recon-lede, .start-here { margin-bottom: 10px !important; }
 
   body { color: #1a1a1a !important; }
 
@@ -2158,8 +2188,8 @@ body.panel-open {
      sheet of paper across a list of this length. Screen does not get the
      rules - there is nothing to write on there. */
   .signs-list li {
-    padding-bottom: 26px;
-    margin-bottom: 9px;
+    padding-bottom: 18px;
+    margin-bottom: 5px;
     border-bottom: 1px dotted #b9a3ab;
   }
 
