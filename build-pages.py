@@ -130,12 +130,13 @@ def build(pid, slug, classes, inner):
     if len(desc) > 155:
         desc = desc[:152].rsplit(" ", 1)[0] + "..."
 
-    # the in-modal back button becomes a real link
-    # the in-modal back button becomes a real link, and says where it goes:
-    # in the modal "All options" is obvious from context, on its own page it is not
+    # The in-modal back button becomes a real link. It reads "Back" in both
+    # places so one journey has one label, and the aria-label carries the
+    # destination for a screen reader, where "Back" on its own says nothing.
     inner = re.sub(
-        r'<button type="button" class="recon-back" data-panel="panel-recon">.*?</button>',
-        '<a class="recon-back" href="/reconstruction">&lsaquo; All reconstruction options</a>',
+        r'<button type="button" class="recon-back"[^>]*>.*?</button>',
+        '<a class="recon-back" href="/reconstruction"'
+        ' aria-label="Back to all reconstruction options">&lsaquo; Back</a>',
         inner, flags=re.S)
     # Every remaining panel trigger is a <button> that only works with the
     # modal script. On a standalone page it has to be a real link, so the
