@@ -2120,3 +2120,48 @@ body.panel-open {
 
   @page { margin: 16mm; }
 }
+
+/* ---- Room underneath for the scroll cue ---------------------------------
+   The cue rides over the text as you scroll, which is fine - it is a hint,
+   and it moves on. What is not fine is where it comes to rest: at the foot
+   of a panel it parks on top of the sources and resources, the one place a
+   reader has stopped to read carefully.
+
+   It always sits in the band 56-96px above the card's bottom edge,
+   wherever that edge falls, because it sticks to the viewport and the card
+   ends at the same height. So the card only needs enough room below its
+   last line for the cue to land in. Only panels that scroll have a cue,
+   and only those get the room. */
+
+#modal > .modal-card.can-scroll {
+  /* 96px clears the cue, plus a visible gap so the last line is not
+     resting against it. */
+  padding-bottom: 124px;
+}
+
+/* ---- Where to start -----------------------------------------------------
+   The question lists are long on purpose: a woman gets one appointment and
+   deserves everything that might matter in it. But arriving frightened to
+   twenty-five questions is its own kind of burden, so the ones that change
+   a decision - or that cannot be asked afterwards, because the operation
+   has already happened - are marked. Everything else stays for whoever has
+   the time and the nerve. */
+
+.start-here {
+  font-size: 0.86rem;
+  color: #7A5560;
+  margin: -6px 0 20px;
+}
+
+.signs-list li.key {
+  font-weight: 700;
+  color: #3A2630;
+}
+
+.signs-list li.key::before {
+  width: 10px;
+  height: 10px;
+  top: 6px;
+  left: -1px;
+  box-shadow: 0 0 0 3px rgba(214, 141, 161, 0.28);
+}
