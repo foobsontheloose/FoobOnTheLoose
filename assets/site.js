@@ -63,7 +63,9 @@
         'recon-FatGrafting': '/reconstruction/fat-grafting',
         'recon-ComboHybrid': '/reconstruction/combination',
         'recon-NippleAreola': '/reconstruction/nipple-areola',
-        'recon-FlatClosure': '/reconstruction/flat-closure'
+        'recon-FlatClosure': '/reconstruction/flat-closure',
+        'q-breast': '/questions-to-ask/breast-surgeon',
+        'q-plastic': '/questions-to-ask/plastic-surgeon'
       };
       var URL_PANELS = {};
       Object.keys(PANEL_URLS).forEach(function (k) { URL_PANELS[PANEL_URLS[k]] = k; });

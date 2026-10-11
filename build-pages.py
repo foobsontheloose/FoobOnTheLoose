@@ -8,6 +8,7 @@ section has its own address. Run it after editing index.html.
 import html as _html
 import os
 import re
+import datetime as _dt
 
 SRC = "index.html"
 SITE = "https://foobsontheloose.com"
@@ -37,6 +38,8 @@ SLUGS = {
     "recon-ComboHybrid":  "reconstruction/combination",
     "recon-NippleAreola": "reconstruction/nipple-areola",
     "recon-FlatClosure":  "reconstruction/flat-closure",
+    "q-breast":           "questions-to-ask/breast-surgeon",
+    "q-plastic":          "questions-to-ask/plastic-surgeon",
 }
 
 
@@ -133,11 +136,20 @@ def build(pid, slug, classes, inner):
     # The in-modal back button becomes a real link. It reads "Back" in both
     # places so one journey has one label, and the aria-label carries the
     # destination for a screen reader, where "Back" on its own says nothing.
+    # Where it goes is read off the button rather than hardcoded, because a
+    # reconstruction detail goes back to /reconstruction while a question
+    # list goes back to /questions-to-ask.
+    def _back_link(m):
+        tag = m.group(0)
+        tgt = re.search(r'data-panel="([^"]+)"', tag)
+        aria = re.search(r'aria-label="([^"]*)"', tag)
+        href = "/" + SLUGS[tgt.group(1)] if tgt and tgt.group(1) in SLUGS else "/"
+        label = ' aria-label="%s"' % aria.group(1) if aria else ""
+        return '<a class="recon-back" href="%s"%s>&lsaquo; Back</a>' % (href, label)
+
     inner = re.sub(
         r'<button type="button" class="recon-back"[^>]*>.*?</button>',
-        '<a class="recon-back" href="/reconstruction"'
-        ' aria-label="Back to all reconstruction options">&lsaquo; Back</a>',
-        inner, flags=re.S)
+        _back_link, inner, flags=re.S)
     # Every remaining panel trigger is a <button> that only works with the
     # modal script. On a standalone page it has to be a real link, so the
     # button becomes an <a> carrying the same classes, and its matching
@@ -225,6 +237,33 @@ def build(pid, slug, classes, inner):
            classes=classes.replace(" recon-detail", " recon-detail"), inner=inner)
 
 
+def write_sitemap(paths):
+    """sitemap.xml from the same SLUGS table that builds the pages.
+
+    It used to be maintained by hand, so adding a page meant remembering to
+    add it here too - and the two question lists were missed the moment they
+    were built. Generating it means a page cannot exist without being
+    listed. Depth sets priority: the homepage, then sections, then the
+    pages beneath them.
+    """
+    today = _dt.date.today().isoformat()
+    rows = ['<?xml version="1.0" encoding="UTF-8"?>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for path in [""] + paths:
+        loc = SITE + "/" + path
+        priority = "1.0" if path == "" else ("0.9" if "/" not in path else "0.8")
+        rows += ["  <url>",
+                 "    <loc>%s</loc>" % loc,
+                 "    <lastmod>%s</lastmod>" % today,
+                 "    <changefreq>monthly</changefreq>",
+                 "    <priority>%s</priority>" % priority,
+                 "  </url>"]
+    rows.append("</urlset>")
+    with open("sitemap.xml", "w", encoding="utf-8") as f:
+        f.write("\n".join(rows) + "\n")
+    print("  sitemap.xml%s%d URLs" % (" " * 26, len(paths) + 1))
+
+
 def main(only=None):
     h = slurp()
     # assets/site.css is now the stylesheet itself, shared by index.html and
@@ -247,6 +286,10 @@ def main(only=None):
         print("  %-34s %6d bytes   /%s" % (path, len(page), slug))
         made += 1
     print("%d page(s)" % made)
+    # Only a full build knows the whole set, so a single-page rebuild leaves
+    # the sitemap alone rather than truncating it to one URL.
+    if not only:
+        write_sitemap(list(SLUGS.values()))
 
 
 if __name__ == "__main__":

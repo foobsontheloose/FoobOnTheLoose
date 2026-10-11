@@ -2001,3 +2001,122 @@ body.panel-open {
    instead. Every panel begins with a heading or a back link, both of which
    do. The calendar card keeps its own padding. */
 #modal > .modal-card { padding-top: 0; }
+
+/* ---- Take the questions with you ----------------------------------------
+   The questions panel is the one page people are meant to carry into an
+   appointment, so it gets a print button. It calls window.print() inline
+   because the standalone /questions-to-ask page loads no JavaScript at
+   all, and one button is not worth a script file. */
+
+.print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 22px;
+  padding: 11px 20px 11px 17px;
+  background: #fff;
+  border: 1.5px solid var(--rose);
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  color: var(--rose-deep);
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.print-btn svg { width: 19px; height: 19px; flex: none; }
+.print-btn:hover { background: var(--blush, #FDF2F5); }
+.print-btn:active { transform: translateY(1px); }
+
+/* Only ever seen on paper: says where the sheet came from, since a printed
+   page has no address bar. */
+.print-only { display: none; }
+
+/* ---- On paper -----------------------------------------------------------
+   Printing used to give you the whole site - hero, tiles, flowers and all -
+   because there were no print styles at all. What should reach the paper is
+   the open panel and nothing else. Panels that are not open carry the
+   hidden attribute, so they never print; everything else is turned off by
+   hand here. */
+
+@media print {
+  .hero,
+  .tabs-section .tab-grid,
+  .howto-section,
+  .photo-wall,
+  .trail,
+  .sa-nav,
+  footer,
+  .hamburger,
+  .nav-toggle,
+  .scroll-cue,
+  .modal-close,
+  .recon-back,
+  .print-btn,
+  .ribbon-link { display: none !important; }
+
+  .print-only { display: block !important; }
+
+  /* The panel is a fixed overlay over a locked page. On paper there is no
+     overlay and no scrolling box: it is just the document, at its full
+     height, or the printer stops at one screenful. */
+  body.panel-open {
+    position: static !important;
+    overflow: visible !important;
+    top: auto !important;
+  }
+
+  /* Only the panel that is actually open. The others - the calendar card
+     above all - are closed backdrops rather than hidden elements, so a
+     blanket rule here printed the monthly reminder card on top of the
+     questions. */
+  .modal-backdrop:not(.open) { display: none !important; }
+
+  .modal-backdrop.open {
+    position: static !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: none !important;
+    padding: 0 !important;
+  }
+
+  .modal-card,
+  #modal > .modal-card {
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+
+  /* The sticky header has nothing to stick to on paper and would repeat. */
+  #modal > .modal-card .tab-panel > h2:first-child,
+  #modal > .modal-card.can-scroll .tab-panel > h2:first-child,
+  #modal > .modal-card.can-scroll .recon-detail > h2 {
+    position: static !important;
+    padding: 0 0 10px !important;
+    background: none !important;
+  }
+
+  html, body {
+    background: #fff !important;
+    font-size: 11.5pt;
+  }
+
+  body { color: #1a1a1a !important; }
+
+  /* A question split across two sheets is a question you lose. */
+  li { break-inside: avoid; page-break-inside: avoid; }
+  h3 { break-after: avoid; page-break-after: avoid; }
+
+  /* A printed link that only says "here" is useless, but these say where
+     they go already, so just make it clear they were links. */
+  a { color: #1a1a1a !important; text-decoration: underline; }
+
+  @page { margin: 16mm; }
+}
