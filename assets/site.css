@@ -2242,7 +2242,10 @@ body.panel-open {
      size does not change at any breakpoint. The negative margins cancel
      the padding, so the pill grows around the words without moving them
      or changing the header's height. */
-  margin: -9.5px -11px;
+  /* -4px on the left is the cross's own margin, so the pill's outer edge
+     and the cross's land the same distance in from their sides of the
+     card at every breakpoint. The other three cancel the padding. */
+  margin: -9.5px -11px -9.5px -4px;
   padding: 9.5px 11px;
   border-radius: 999px;
   /* Same resting state as the cross, and the same move on hover: it sits
@@ -2256,7 +2259,12 @@ body.panel-open {
      every breakpoint. Shifting it is visual only: the box stays where it
      was, which the heading's sticky offset depends on. */
   position: relative;
-  top: calc(21.5px - var(--card-top, 34px));
+  /* 21.5px puts the two centres level to the pixel. Nicky's eye reads the
+     pill as sitting high there, which is the usual way of it: a wide flat
+     shape next to a circle of the same height looks higher than it is. So
+     it carries 2px of optical correction - geometrically 2px low, which is
+     what looks centred. */
+  top: calc(23.5px - var(--card-top, 34px));
   transition: background 0.15s ease;
 }
 
