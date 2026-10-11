@@ -1945,36 +1945,54 @@ body.panel-open {
    up into the card's top padding so nothing shows above it. The side padding
    is symmetric, which keeps the heading centred while clearing the cross. */
 
-.tab-panel > h2:first-child {
-  position: sticky;
-  top: 0;
-  z-index: 3;
-  background: var(--paper);
+/* Only inside the modal: there the card is the scrolling container and it
+   gives up its own top padding, so the header has to carry it. A section
+   page scrolls as a whole document and keeps its padding, so it is left
+   alone - heading sticky to the viewport would duplicate its nav bar. */
+#modal > .modal-card .tab-panel > h2:first-child {
   padding: var(--card-top, 34px) 38px 10px;
 }
 
 /* A reconstruction detail leads with its back link, so that sits at the top
-   of the sticky header and the heading sticks directly beneath it. */
-.recon-detail > .recon-back {
-  position: sticky;
-  top: 0;
-  z-index: 4; /* below the close cross at 6, above the heading at 3 */
+   of the header and the heading sits directly underneath it. */
+#modal > .modal-card .recon-detail > .recon-back {
   display: block;
   width: 100%;
   text-align: left;
-  background: var(--paper);
-  padding: var(--card-top, 34px) 38px 4px 0;
+  padding: var(--card-top, 34px) 38px 0 0;
 }
 
-.recon-detail > h2 {
+#modal > .modal-card .recon-detail > h2 {
+  margin-top: 0;
+  padding: 0 38px 6px;
+}
+
+/* ...and it only sticks when there is something to scroll underneath it.
+   can-scroll is set when the content overflows by more than the cue's own
+   24px dead zone, so a panel that all but fits - DIEP flap is 17px over -
+   keeps a plain heading and no sticky behaviour at all. Geometry above is
+   unconditional, so gaining or losing the class never shifts the layout. */
+#modal > .modal-card.can-scroll .tab-panel > h2:first-child {
   position: sticky;
-  /* directly beneath the back link, whose height is the card's top padding
-     plus its own line and 4px below it */
-  top: calc(var(--card-top, 34px) + 23px);
+  top: 0;
   z-index: 3;
   background: var(--paper);
-  margin-top: 0;
-  padding: 2px 38px 10px;
+}
+
+#modal > .modal-card.can-scroll .recon-detail > .recon-back {
+  position: sticky;
+  top: 0;
+  z-index: 4; /* below the close cross at 6, above the heading at 3 */
+  background: var(--paper);
+}
+
+#modal > .modal-card.can-scroll .recon-detail > h2 {
+  position: sticky;
+  /* directly beneath the back link, whose height is the card's top padding
+     plus its own line */
+  top: calc(var(--card-top, 34px) + 19px);
+  z-index: 3;
+  background: var(--paper);
 }
 
 /* A sticky element inside a scrolling box sticks below that box's padding,
