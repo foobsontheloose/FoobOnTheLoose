@@ -2110,7 +2110,58 @@ body.panel-open {
 
   body { color: #1a1a1a !important; }
 
-  /* A question split across two sheets is a question you lose. */
+  /* Ink-friendly. On screen the headings are rose and the bullets are
+     rose-deep, which is the site; on an inkjet it is a colour cartridge
+     spent on a worksheet. Everything that prints is black on white, with
+     the rules in grey. The bold questions still read as bold, because that
+     was never carried by colour. */
+  h1, h2, h3, h4,
+  .recon-group-title,
+  .recon-lede,
+  .start-here,
+  .ask-personal,
+  .recon-src,
+  .signs-note,
+  .info-note,
+  p, li, strong, em, span {
+    color: #1a1a1a !important;
+  }
+
+  .signs-list li::before {
+    background: #444 !important;
+    box-shadow: none !important;
+  }
+
+  .recon-group-title { border-bottom-color: #ccc !important; }
+  .signs-list li { border-bottom-color: #bbb !important; }
+
+  /* Tinted panels and cards are decoration on paper. */
+  .signs-note,
+  .info-note,
+  .recon-note,
+  .band-note,
+  .stat,
+  .stat-grid,
+  .res,
+  .res-list {
+    background: #fff !important;
+    box-shadow: none !important;
+    border-color: #ddd !important;
+  }
+
+  /* Room to write the answer down, and a line to write it on. This is the
+     point of printing it: a question whose answer is not written down has
+     been forgotten by the time she reaches the car park. It costs one extra
+     sheet of paper across a list of this length. Screen does not get the
+     rules - there is nothing to write on there. */
+  .signs-list li {
+    padding-bottom: 26px;
+    margin-bottom: 9px;
+    border-bottom: 1px dotted #b9a3ab;
+  }
+
+  /* A question split across two sheets is a question you lose - and the
+     writing space has to travel with it. */
   li { break-inside: avoid; page-break-inside: avoid; }
   h3 { break-after: avoid; page-break-after: avoid; }
 
