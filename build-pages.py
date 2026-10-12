@@ -285,6 +285,7 @@ def build(pid, slug, classes, inner):
     <a class="ribbon-link" href="/questions-to-ask">Questions to ask</a>
     <a class="ribbon-link" href="/support">Support</a>
     <a class="ribbon-link" href="/why-it-matters">Why it matters</a>
+    <a class="ribbon-link" href="/#cal-btn">Monthly reminder</a>
   </div>
 </nav>
 <div class="page-wrap">
