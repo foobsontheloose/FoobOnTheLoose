@@ -79,3 +79,8 @@ images/*_1_105_c 2.jpeg
 
 # Generator for the standalone section pages. Source, not served.
 build-pages.py
+
+# The full-size artwork the badge is cut from. 1.6 MB, never requested by
+# any page, and named in full rather than by pattern - a wildcard here once
+# matched 15 diagrams and took them off the site.
+images/Calendar_1st_Transparent.png
