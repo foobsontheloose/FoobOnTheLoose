@@ -134,6 +134,28 @@ def site_footer(h):
     foot = h[h.rindex("<footer>"):]
     foot = foot[:foot.index("</footer>") + len("</footer>")]
 
+    # A reader who arrives from a search wants the answer, not an
+    # introduction - so Foobie waits until she has had it. By the foot of the
+    # page the question that brought her here is answered, and "who are these
+    # people, what else is here" is finally a question she might have.
+    welcome = (
+        '<a class="sa-welcome" href="/" aria-label="Go to the Foobs On the Loose homepage">'
+        '<span class="mascot-wrap">'
+        '<img src="/images/foobie.webp" alt="" aria-hidden="true" width="408" height="470" />'
+        '<span class="reg-mark" aria-hidden="true">&trade;</span>'
+        '</span>'
+        '<span class="sa-welcome-name">Foobs On The Loose</span>'
+        '<span class="sa-welcome-home">'
+        '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">'
+        '<path d="M3.5 11.2 12 4l8.5 7.2" stroke="currentColor" stroke-width="1.9" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+        '<path d="M5.9 10.3V20h12.2v-9.7" stroke="currentColor" stroke-width="1.9" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+        '</svg> Tap for more</span>'
+        '</a>'
+    )
+    foot = foot.replace("<footer>", "<footer>\n  " + welcome, 1)
+
     # panel triggers become real addresses
     def panel(m):
         pid = m.group(1)
@@ -250,33 +272,32 @@ def build(pid, slug, classes, inner):
 <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body class="standalone">
-<a class="sa-brand" href="/" aria-label="Foobs On the Loose - home">
-  <svg class="brand-flourish" viewBox="0 0 120 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M6 14 C 30 4, 44 4, 56 11" fill="none" stroke="var(--rose)" stroke-width="1.6" stroke-linecap="round"/>
-    <path d="M114 14 C 90 4, 76 4, 64 11" fill="none" stroke="var(--rose)" stroke-width="1.6" stroke-linecap="round"/>
-    <path d="M60 4 C 55 8, 55 14, 60 17 C 65 14, 65 8, 60 4 Z" fill="var(--rose-deep)"/>
-  </svg>
-  <span class="sa-brand-name">Foobs<span>On The Loose</span></span>
-</a>
-<nav class="sa-nav" aria-label="Sections">
-  <a href="/#howto">Self-exam</a>
-  <a href="/know-the-signs">Know the signs</a>
-  <a href="/screening">Screening</a>
-  <a href="/reconstruction">Reconstruction</a>
-  <a href="/questions-to-ask">Questions to ask</a>
-  <a href="/support">Support</a>
-  <a href="/why-it-matters">Why it matters</a>
+<nav class="ribbon-nav" aria-label="Jump to a section">
+  <button type="button" class="nav-toggle" id="nav-toggle"
+          aria-expanded="false" aria-controls="ribbon-inner" aria-label="Open menu">
+    <span class="nav-toggle-bars" aria-hidden="true"></span>
+  </button>
+  <div class="ribbon-inner" id="ribbon-inner">
+    <a class="ribbon-link" href="/#howto">Self-exam</a>
+    <a class="ribbon-link" href="/know-the-signs">Know the signs</a>
+    <a class="ribbon-link" href="/screening">Screening</a>
+    <a class="ribbon-link" href="/reconstruction">Reconstruction</a>
+    <a class="ribbon-link" href="/questions-to-ask">Questions to ask</a>
+    <a class="ribbon-link" href="/support">Support</a>
+    <a class="ribbon-link" href="/why-it-matters">Why it matters</a>
+  </div>
 </nav>
 <div class="page-wrap">
   <img class="trail trail--l" src="/images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" />
   <img class="trail trail--r" src="/images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" />
   <main class="modal-card page-card">
+    <a class="modal-close page-close" href="/" aria-label="Close and go to the homepage">&times;</a>
     <div class="{classes}">{inner}</div>
   </main>
-  <a class="page-home" href="/">&larr; Foobs On the Loose</a>
 </div>
 {footer}
-{lightbox}</body>
+{lightbox}<script src="/assets/nav.js"></script>
+</body>
 </html>
 """.format(lightbox=LIGHTBOX if 'wall-shot' in inner else "",
            footer=site_footer(slurp()),

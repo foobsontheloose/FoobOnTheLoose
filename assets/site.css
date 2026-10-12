@@ -1861,6 +1861,11 @@
    Each panel also exists at its own address. These rules give that page the
    same card the modal uses, without the modal's overlay behaviour. */
 .page-wrap { padding: 92px 18px 60px; position: relative; z-index: 1; }
+
+/* Nothing sits between the card and Foobie now that the duplicate home link
+   has gone, so the gap that was holding it has gone too. */
+body.standalone .page-wrap { padding-bottom: 14px; }
+body.standalone footer { padding-top: 10px; }
 /* The card carries .modal-card too, so it inherits that element's width,
    padding and radius at every breakpoint and cannot drift from it. These
    rules undo only the parts that exist because it is normally an overlay. */
@@ -2297,8 +2302,15 @@ body.panel-open {
   /* -4px on the left is the cross's own margin, so the pill's outer edge
      and the cross's land the same distance in from their sides of the
      card at every breakpoint. The other three cancel the padding. */
-  margin: -9.5px -11px -9.5px -4px;
-  padding: 9.5px 11px;
+  /* Exactly the cross's 38px, however the line box measures in whatever
+     context it lands in, with the text centred inside. The negative margins
+     cancel the extra height so the header is the same size as it was. */
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  box-sizing: border-box;
+  margin: -8px -11px -8px -4px;
+  padding: 0 11px;
   border-radius: 999px;
   /* Same resting state as the cross, and the same move on hover: it sits
      in petal-soft and darkens to petal, over the same 0.15s. The cross was
@@ -2316,9 +2328,23 @@ body.panel-open {
      shape next to a circle of the same height looks higher than it is. So
      it carries 2px of optical correction - geometrically 2px low, which is
      what looks centred. */
-  top: calc(23.5px - var(--card-top, 34px));
   transition: background 0.15s ease;
 }
+
+/* The lift belongs to the modal alone. There the card gives up its top
+   padding and the header carries it, so the pill has to be pulled up to
+   meet the close cross. A section page keeps the card's own padding, so
+   both controls already start from the same line - lifting the pill there
+   only pushed it 16px above the cross. */
+#modal .recon-back > span {
+  top: calc(22px - var(--card-top, 34px));
+}
+
+/* On a section page the card keeps its own padding, so the cross starts at
+   the top of the content and the pill's box starts 8px above it - the half
+   of its own height that the negative margin took back. Putting the 8px
+   back puts the two on the same line. */
+body.standalone .recon-back > span { top: 7.5px; }
 
 .recon-back:hover > span { background: var(--petal); }
 
@@ -2383,4 +2409,102 @@ body.panel-open {
   .sa-brand { gap: 7px; padding-top: 13px; }
   .sa-brand .brand-flourish { width: 44px; }
   .sa-brand-name { font-size: 1rem; }
+}
+
+/* ---- A section page reads as a panel over the site ----------------------
+   These pages are where a search result lands, and they looked like a
+   different, plainer site than the one the homepage shows. The card is
+   already the modal card; what was missing was the dimmed ground behind it
+   and the cross. The cross is a plain link to the homepage rather than
+   history.back(), so it goes to the site no matter where the reader came
+   from - back would have returned her to Google. */
+
+/* Same cross as the modal's - same size, same tint, same corner - and it is
+   a link, so it works with no script at all. */
+.page-close {
+  text-decoration: none;
+  line-height: 1;
+}
+
+
+/* ---- Foobie, at the end -------------------------------------------------
+   A woman who arrives from a search wants the answer she searched for, so
+   nothing stands between her and it. By the foot of the page she has had
+   it, and "who are these people" is a question she might have now. Foobie
+   over the wordmark, the way the homepage stacks them, so the two pages
+   introduce themselves the same way. */
+
+footer .sa-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin: 0 auto 30px;
+  padding: 0 18px;
+  text-decoration: none;
+}
+
+footer .sa-welcome img { height: 168px; width: auto; }
+
+footer .sa-welcome-name {
+  display: block;
+  margin-top: 6px;
+  text-align: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.72rem;
+  line-height: 1.05;
+  letter-spacing: -0.012em;
+  color: var(--rose-deep);
+  white-space: nowrap;
+}
+
+/* The same cue the calendar badge uses on the homepage - uppercase,
+   letterspaced, no button around it - so the two "tap this" labels on the
+   site are the same thing rather than two inventions. The little house
+   stays, because unlike the calendar's label this one has to say where the
+   tap goes, not just what it does. */
+footer .sa-welcome-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--rose-deep);
+  opacity: 0.85;
+  transition: opacity 0.15s ease;
+}
+
+footer .sa-welcome-home svg { width: 14px; height: 14px; flex: none; }
+footer .sa-welcome:hover .sa-welcome-home { opacity: 1; }
+footer .sa-welcome:hover .sa-welcome-name { opacity: 0.82; }
+
+/* The trademark sits by her boot, as it does on the homepage. */
+footer .sa-welcome .mascot-wrap { position: relative; display: inline-block; line-height: 0; }
+footer .sa-welcome .reg-mark {
+  position: absolute;
+  left: 34%;
+  bottom: 5%;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0.75;
+  pointer-events: none;
+}
+footer .sa-welcome, footer .sa-welcome * { text-decoration: none; }
+
+@media print { footer .sa-welcome { display: none !important; } }
+
+@media (max-width: 520px) {
+  footer .sa-welcome { margin-bottom: 24px; }
+  footer .sa-welcome img { height: 132px; }
+  footer .sa-welcome-name { font-size: 1.42rem; }
 }
