@@ -2508,3 +2508,36 @@ footer .sa-welcome, footer .sa-welcome * { text-decoration: none; }
   footer .sa-welcome img { height: 132px; }
   footer .sa-welcome-name { font-size: 1.42rem; }
 }
+
+/* ---- A way home at the top as well --------------------------------------
+   The close cross does it, and Foobie does it at the foot, but a woman who
+   arrived from a search has met neither convention yet - a cross in a corner
+   means "close" only if you know you are in something. So it is said once
+   in words, directly under the menu, before she starts reading. Same label
+   treatment as the calendar hint and Foobie's: uppercase, letterspaced, no
+   button around it. */
+
+.sa-tohome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 auto;
+  padding: 2px 18px 0;
+  position: relative;
+  z-index: 3;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  opacity: 0.85;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.sa-tohome span { font-size: 1.05em; line-height: 0; }
+.sa-tohome:hover { opacity: 1; }
+
+@media print { .sa-tohome { display: none !important; } }

@@ -288,6 +288,7 @@ def build(pid, slug, classes, inner):
     <a class="ribbon-link" href="/#cal-btn">Monthly reminder</a>
   </div>
 </nav>
+<a class="sa-tohome" href="/">Explore the full website <span aria-hidden="true">&rarr;</span></a>
 <div class="page-wrap">
   <img class="trail trail--l" src="/images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" />
   <img class="trail trail--r" src="/images/trail.webp" alt="" aria-hidden="true" width="380" height="2600" />
