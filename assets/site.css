@@ -37,8 +37,13 @@
 
   a { color: inherit; }
 
+  /* The ring that lands on the calendar badge when someone arrives from a
+     section page's "monthly reminder" link. It was sage - the one non-pink
+     in the palette - but it appears nowhere else on the site and read as a
+     browser default. Rose-deep is the heading colour, and at 3.3:1 against
+     the paper it clears the 3:1 a focus indicator needs. */
   :focus-visible {
-    outline: 3px solid var(--leaf);
+    outline: 3px solid var(--rose-deep);
     outline-offset: 3px;
   }
 
@@ -1820,6 +1825,7 @@
     .ribbon-link + .ribbon-link {
       border-top: 1px solid rgba(201, 106, 133, 0.16);
     }
+
   }
 
   .ribbon-link {

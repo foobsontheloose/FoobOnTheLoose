@@ -317,6 +317,16 @@
       });
       if (calClose) calClose.addEventListener('click', closeCal);
 
+      // A section page has no chooser on it, so "Set your reminder" there
+      // links to /?reminder and the chooser is already open when she lands -
+      // one tap from anywhere rather than one tap and then a hunt for the
+      // badge. The marker is dropped from the address afterwards so a
+      // refresh or a bookmark does not reopen it.
+      if (/[?&]reminder\b/.test(location.search)) {
+        openCal();
+        history.replaceState(null, '', location.pathname + location.hash);
+      }
+
       // When the .ics opens in Calendar (or Google Calendar opens in a new tab)
       // this page gets backgrounded and timers are suspended, so a setTimeout
       // close is unreliable. Close when the page is hidden or loses focus
