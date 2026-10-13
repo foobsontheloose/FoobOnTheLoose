@@ -1978,6 +1978,13 @@ body.panel-open {
   padding-right: 38px;
 }
 
+/* The calendar card has its own heading, outside both rules above, and its
+   cross sat on the words the same way. */
+.cal-card > h2 {
+  padding-left: 38px;
+  padding-right: 38px;
+}
+
 /* A reconstruction detail leads with its back link, so that sits at the top
    of the header and the heading sits directly underneath it. */
 #modal > .modal-card .recon-detail > .recon-back {
