@@ -30,11 +30,12 @@
   });
 })();
 
-/* Facebook and Instagram open links in their own in-app browser, and that
-   browser has no print dialog at all - WKWebView leaves printing to the host
-   app, and neither app built one. window.print() fires and nothing happens.
-   Nothing here can change that, so the honest thing is to say so before she
-   taps rather than leave her pressing a dead button. Everywhere else - a real
+/* Facebook and Instagram open links in their own in-app browser, which is a
+   WKWebView with none of the parts a real browser hands a page: no print
+   dialog, and no handing a downloaded file to another app. Printing does
+   nothing at all, and the calendar file arrives on the screen as text. Neither
+   is fixable from in here, so the honest thing is to say so before she taps
+   rather than leave her pressing a dead button. Everywhere else - a real
    browser on a phone or a computer - this runs and does nothing. */
 (function () {
   var ua = navigator.userAgent || '';
@@ -43,13 +44,31 @@
           : '';
   if (!app) return;
 
-  var buttons = document.querySelectorAll('.print-btn');
-  for (var i = 0; i < buttons.length; i++) {
+  var OPEN_IT = "Tap ••• at the top right and open this page in your browser";
+
+  function noteAfter(el, text) {
     var note = document.createElement('p');
     note.className = 'print-note';
-    note.textContent = app + "’s browser can’t print. Tap ••• at the "
-      + "top right and open this page in your browser — then Print this list "
-      + "will work.";
-    buttons[i].insertAdjacentElement('afterend', note);
+    note.textContent = text;
+    el.insertAdjacentElement('afterend', note);
+  }
+
+  var buttons = document.querySelectorAll('.print-btn');
+  for (var i = 0; i < buttons.length; i++) {
+    noteAfter(buttons[i], app + "’s browser can’t print. " + OPEN_IT
+      + " — then Print this list will work.");
+  }
+
+  /* The calendar file hits the same wall from the other side: the browser is
+     handed a .ics and shows it as text on the screen rather than passing it to
+     the Calendar app. The card's own footnote - that the file opens straight
+     into Calendar on an iPhone - is the one thing that is not true in here, so
+     it stands down while this is showing. */
+  var ics = document.getElementById('cal-ics');
+  if (ics) {
+    noteAfter(ics, app + "’s browser can’t open the calendar file — it "
+      + "shows it as text instead. " + OPEN_IT + ", then tap this again.");
+    var footnote = document.querySelector('.cal-note');
+    if (footnote) footnote.hidden = true;
   }
 })();

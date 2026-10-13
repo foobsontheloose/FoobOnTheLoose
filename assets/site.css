@@ -2068,6 +2068,11 @@ body.panel-open {
   color: #7A5560;
 }
 
+/* Inside the calendar card the options are a flex column with its own gap,
+   so the note sits as another item and brings no margins of its own. The card
+   centres its text; the note is a paragraph to read, so it reads left. */
+.cal-options .print-note { margin: 0; text-align: left; }
+
 /* Only ever seen on paper: says where the sheet came from, since a printed
    page has no address bar. */
 .print-only { display: none; }
