@@ -219,6 +219,9 @@
       var icsBtn = document.getElementById('cal-ics');
       var gLink = document.getElementById('cal-google');
 
+      /* These feed the Google Calendar link. The same words are written into
+         /feel-it-on-the-first.ics, which the Apple option links to directly -
+         change one and change the other. */
       var TITLE = 'Feel It on the First';
       var DETAILS = 'Your monthly reminder to check yourself. Steps at https://foobsontheloose.com';
 
@@ -234,48 +237,6 @@
         return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
       }
 
-      function buildICS() {
-        var start = firstOfNextMonth();
-        var end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1);
-        var now = new Date();
-        var stamp = now.getUTCFullYear() + pad(now.getUTCMonth() + 1) + pad(now.getUTCDate())
-                  + 'T' + pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + pad(now.getUTCSeconds()) + 'Z';
-
-        var lines = [
-          'BEGIN:VCALENDAR',
-          'VERSION:2.0',
-          'PRODID:-//Foobs On the Loose//Self-exam reminder//EN',
-          'CALSCALE:GREGORIAN',
-          'BEGIN:VEVENT',
-          'UID:' + stamp + '-foobsontheloose@foobsontheloose.com',
-          'DTSTAMP:' + stamp,
-          'DTSTART;VALUE=DATE:' + dateStamp(start),
-          'DTEND;VALUE=DATE:' + dateStamp(end),
-          'RRULE:FREQ=MONTHLY;BYMONTHDAY=1',
-          'SUMMARY:' + TITLE,
-          'DESCRIPTION:' + DETAILS,
-          'TRANSP:TRANSPARENT',
-          'BEGIN:VALARM',
-          'ACTION:DISPLAY',
-          'DESCRIPTION:' + TITLE,
-          'TRIGGER:PT9H',
-          'END:VALARM',
-          'END:VEVENT',
-          'END:VCALENDAR'
-        ];
-        return lines.join('\r\n');
-      }
-
-      function makeIcsUrl() {
-        var data = buildICS();
-        try {
-          var blob = new Blob([data], { type: 'text/calendar;charset=utf-8' });
-          return { url: URL.createObjectURL(blob), isBlob: true };
-        } catch (err) {
-          return { url: 'data:text/calendar;charset=utf-8,' + encodeURIComponent(data), isBlob: false };
-        }
-      }
-
       function googleUrl() {
         var start = firstOfNextMonth();
         var end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1);
@@ -286,21 +247,11 @@
           + '&recur=' + encodeURIComponent('RRULE:FREQ=MONTHLY;BYMONTHDAY=1');
       }
 
-      var lastIcsUrl = null;
-
+      /* The Apple option is a plain link to a real file in the markup, so it
+         works with no script at all and arrives with its own name. Only the
+         Google link, which carries the dates in its address, is built here. */
       function openCal() {
         gLink.href = googleUrl();
-
-        // build a real href up front so the link is a genuine download,
-        // not a scripted click (which desktop browsers often block)
-        if (lastIcsUrl) {
-          try { URL.revokeObjectURL(lastIcsUrl); } catch (e) {}
-          lastIcsUrl = null;
-        }
-        var made = makeIcsUrl();
-        icsBtn.href = made.url;
-        if (made.isBlob) lastIcsUrl = made.url;
-
         calModal.classList.add('open');
         lockPage();
       }
