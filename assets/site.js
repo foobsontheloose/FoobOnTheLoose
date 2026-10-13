@@ -219,30 +219,63 @@
       var icsBtn = document.getElementById('cal-ics');
       var gLink = document.getElementById('cal-google');
 
-      /* A phone hands the file straight to Calendar in one tap. A Mac cannot:
-         it saves the file to Downloads and she has to go and find it. So on a
-         Mac the option itself becomes the thing that works there - webcal: is
-         not a web address, so the browser passes it to the machine, which has
-         it bound to Calendar - and nobody has to read a word to get it.
+      /* Which machine she is on. An iPad calls itself a Macintosh, so a touch
+         screen is what tells the two apart - and getting that wrong would send
+         a Mac's route to an iPad, which does not need it. Anything we do not
+         recognise is left alone and keeps the label in the markup. */
+      var PLATFORM = (function () {
+        var ua = navigator.userAgent;
+        if (/iPhone|iPad|iPod/.test(ua)) return 'ios';
+        if (/Macintosh/.test(ua)) return navigator.maxTouchPoints ? 'ios' : 'mac';
+        if (/Android/.test(ua)) return 'android';
+        if (/Windows/.test(ua)) return 'windows';
+        return '';
+      })();
 
-         It is Apple's calendar that answers webcal:, so the option says so
-         here, and the file moves down to the small print for anyone on a Mac
-         running Outlook or anything else. The edge case gets the line nobody
-         reads, rather than the good path.
+      /* The option named every calendar it serves - Apple, Samsung and
+         Outlook - which meant whoever was reading it had to find herself in a
+         list. Nobody reads a label looking for her own name; she either sees
+         it or she does not. So it says the one that is hers, and what will
+         happen when she taps it, which is different on each of them.
 
-         Only a real Mac: an iPad calls itself a Macintosh too, and its one-tap
-         route already works, so no touch screen is part of the test. */
-      if (icsBtn
-          && /Macintosh/.test(navigator.userAgent)
-          && !navigator.maxTouchPoints) {
-        var ICS_HREF = icsBtn.getAttribute('href');
+         The file behind it is the same everywhere. Only a Mac is a different
+         address, because only a Mac cannot open the file without a trip to
+         Downloads - see below. */
+      var LABELS = {
+        ios:     ['Apple Calendar', 'Opens straight into your Calendar app'],
+        mac:     ['Apple Calendar', 'Opens Calendar \u2014 nothing to download'],
+        android: ['Samsung & other calendars', 'Downloads a file \u2014 tap it to import'],
+        windows: ['Outlook & other calendars', 'Downloads a file \u2014 open it to add']
+      };
+
+      if (icsBtn && LABELS[PLATFORM]) {
         var title = icsBtn.querySelector('.cal-opt-title');
         var sub = icsBtn.querySelector('.cal-opt-sub');
+        if (title) title.textContent = LABELS[PLATFORM][0];
+        if (sub) sub.textContent = LABELS[PLATFORM][1];
 
+        /* The footnote is a sentence about iPhones and a sentence about
+           Android phones, written when the option could not say which was
+           which. Now it can, and the footnote only repeats it or talks about
+           a machine she is not on. It stays for anything unrecognised. */
+        var footnote = document.querySelector('.cal-note');
+        if (footnote) footnote.hidden = true;
+      }
+
+      /* A phone hands the file straight to Calendar in one tap. A Mac cannot:
+         it saves it to Downloads and she has to go and find it. So on a Mac
+         the option itself becomes the thing that works there - webcal: is not
+         a web address, so the browser passes it to the machine, which has it
+         bound to Calendar - and nobody has to read a word to get it.
+
+         It is Apple's calendar that answers webcal:, so the file moves down to
+         the small print for anyone on a Mac running Outlook or anything else.
+         The line nobody reads carries the rare case rather than the common
+         one. */
+      if (icsBtn && PLATFORM === 'mac') {
+        var ICS_HREF = icsBtn.getAttribute('href');
         icsBtn.href = 'webcal://foobsontheloose.com/feel-it-on-the-first.ics';
         icsBtn.removeAttribute('download');
-        if (title) title.textContent = 'Apple Calendar';
-        if (sub) sub.textContent = 'Opens Calendar \u2014 nothing to download';
 
         var other = document.createElement('p');
         other.className = 'cal-mac';
@@ -254,11 +287,6 @@
         other.appendChild(file);
         other.appendChild(document.createTextNode(' instead.'));
         icsBtn.insertAdjacentElement('afterend', other);
-
-        /* The card's footnote is about iPhones and Android phones. Neither
-           sentence is true of the machine she is sitting at. */
-        var footnote = document.querySelector('.cal-note');
-        if (footnote) footnote.hidden = true;
       }
 
       /* These feed the Google Calendar link. The same words are written into
