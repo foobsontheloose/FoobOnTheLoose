@@ -67,19 +67,12 @@
      it stands down while this is showing. */
   var ics = document.getElementById('cal-ics');
   if (ics) {
-    var note = noteAfter(ics, app + "’s browser can’t open the calendar file "
+    /* A webcal: link was offered here as a way out that did not mean leaving
+       the app first. It does nothing: this browser will not hand a non-web
+       address to another app either. Opening the page in a real browser is
+       the only way through, so that instruction stands on its own. */
+    noteAfter(ics, app + "’s browser can’t open the calendar file "
       + "— it shows it as text instead. " + OPEN_IT + ", then tap this again.");
-
-    /* webcal: is not a web address, so this browser does not try to open it
-       itself - it hands it to the phone, which gives it to the Calendar app.
-       That is the one route out of here that does not need her to leave
-       first, and it subscribes rather than adding a single event, which is
-       why it says subscribe. */
-    var sub = document.createElement('a');
-    sub.className = 'print-note-link';
-    sub.href = 'webcal://foobsontheloose.com/feel-it-on-the-first.ics';
-    sub.textContent = 'Or tap here to subscribe in your Calendar app';
-    note.appendChild(sub);
 
     var footnote = document.querySelector('.cal-note');
     if (footnote) footnote.hidden = true;

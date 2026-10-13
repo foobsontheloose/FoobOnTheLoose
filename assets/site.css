@@ -2080,15 +2080,6 @@ body.panel-open {
    centres its text; the note is a paragraph to read, so it reads left. */
 .cal-options .print-note { margin: 0; text-align: left; }
 
-/* The one way out that does not mean leaving the app first, so it reads as
-   something to tap rather than more of the sentence above it. */
-.print-note-link {
-  display: block;
-  margin-top: 9px;
-  font-weight: 800;
-  color: var(--rose-deep);
-}
-
 /* Only ever seen on paper: says where the sheet came from, since a printed
    page has no address bar. */
 .print-only { display: none; }
