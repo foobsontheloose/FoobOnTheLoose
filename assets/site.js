@@ -219,6 +219,25 @@
       var icsBtn = document.getElementById('cal-ics');
       var gLink = document.getElementById('cal-google');
 
+      /* A phone hands the file straight to Calendar. A Mac cannot: it saves it
+         to Downloads and she has to go and find it. webcal: is not a web
+         address, so the browser passes it to the machine, which opens Calendar
+         - one click, no file. Offered only on a Mac, and only a real one:
+         an iPad calls itself a Macintosh too, and it does not need this. */
+      if (icsBtn
+          && /Macintosh/.test(navigator.userAgent)
+          && !navigator.maxTouchPoints) {
+        var mac = document.createElement('p');
+        mac.className = 'cal-mac';
+        mac.appendChild(document.createTextNode('On a Mac this saves to Downloads. '));
+        var sub = document.createElement('a');
+        sub.href = 'webcal://foobsontheloose.com/feel-it-on-the-first.ics';
+        sub.textContent = 'Subscribe in Calendar instead';
+        mac.appendChild(sub);
+        mac.appendChild(document.createTextNode(' to skip the file.'));
+        icsBtn.insertAdjacentElement('afterend', mac);
+      }
+
       /* These feed the Google Calendar link. The same words are written into
          /feel-it-on-the-first.ics, which the Apple option links to directly -
          change one and change the other. */

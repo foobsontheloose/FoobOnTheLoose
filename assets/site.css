@@ -416,6 +416,19 @@
     margin: 0;
   }
 
+  /* Sits inside the options list, which is a flex column with its own gap,
+     so it carries no margins of its own. Quieter than the options it sits
+     between: it is a way round, not a third choice. */
+  .cal-mac {
+    margin: -4px 2px 0;
+    font-size: 0.78rem;
+    color: #A38792;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  .cal-mac a { color: var(--rose-deep); font-weight: 700; }
+
   .feel-it {
     font-family: 'Fraunces', serif;
     font-style: italic;
