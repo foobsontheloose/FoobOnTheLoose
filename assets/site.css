@@ -1967,6 +1967,17 @@ body.panel-open {
   padding: var(--card-top, 34px) 38px 10px;
 }
 
+/* The section pages keep their own top padding, so they are left out of the
+   rule above - but the cross sits in the same corner there, and without the
+   same symmetric side padding a title long enough to reach it runs straight
+   underneath. Half of them did on a phone. Padding both sides rather than
+   only the right keeps the heading centred, and it makes a page break its
+   title on the same words the panel does. */
+.page-card .tab-panel > h2:first-child {
+  padding-left: 38px;
+  padding-right: 38px;
+}
+
 /* A reconstruction detail leads with its back link, so that sits at the top
    of the header and the heading sits directly underneath it. */
 #modal > .modal-card .recon-detail > .recon-back {
