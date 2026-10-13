@@ -51,6 +51,7 @@
     note.className = 'print-note';
     note.textContent = text;
     el.insertAdjacentElement('afterend', note);
+    return note;
   }
 
   var buttons = document.querySelectorAll('.print-btn');
@@ -66,8 +67,20 @@
      it stands down while this is showing. */
   var ics = document.getElementById('cal-ics');
   if (ics) {
-    noteAfter(ics, app + "’s browser can’t open the calendar file — it "
-      + "shows it as text instead. " + OPEN_IT + ", then tap this again.");
+    var note = noteAfter(ics, app + "’s browser can’t open the calendar file "
+      + "— it shows it as text instead. " + OPEN_IT + ", then tap this again.");
+
+    /* webcal: is not a web address, so this browser does not try to open it
+       itself - it hands it to the phone, which gives it to the Calendar app.
+       That is the one route out of here that does not need her to leave
+       first, and it subscribes rather than adding a single event, which is
+       why it says subscribe. */
+    var sub = document.createElement('a');
+    sub.className = 'print-note-link';
+    sub.href = 'webcal://foobsontheloose.com/feel-it-on-the-first.ics';
+    sub.textContent = 'Or tap here to subscribe in your Calendar app';
+    note.appendChild(sub);
+
     var footnote = document.querySelector('.cal-note');
     if (footnote) footnote.hidden = true;
   }
