@@ -29,3 +29,27 @@
     if (e.key === 'Escape') setOpen(false);
   });
 })();
+
+/* Facebook and Instagram open links in their own in-app browser, and that
+   browser has no print dialog at all - WKWebView leaves printing to the host
+   app, and neither app built one. window.print() fires and nothing happens.
+   Nothing here can change that, so the honest thing is to say so before she
+   taps rather than leave her pressing a dead button. Everywhere else - a real
+   browser on a phone or a computer - this runs and does nothing. */
+(function () {
+  var ua = navigator.userAgent || '';
+  var app = /FBAN|FBAV|FB_IAB|FBIOS/.test(ua) ? 'Facebook'
+          : /Instagram/.test(ua) ? 'Instagram'
+          : '';
+  if (!app) return;
+
+  var buttons = document.querySelectorAll('.print-btn');
+  for (var i = 0; i < buttons.length; i++) {
+    var note = document.createElement('p');
+    note.className = 'print-note';
+    note.textContent = app + "’s browser can’t print. Tap ••• at the "
+      + "top right and open this page in your browser — then Print this list "
+      + "will work.";
+    buttons[i].insertAdjacentElement('afterend', note);
+  }
+})();

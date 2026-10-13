@@ -2055,6 +2055,19 @@ body.panel-open {
 .print-btn:hover { background: var(--blush, #FDF2F5); }
 .print-btn:active { transform: translateY(1px); }
 
+/* Only ever seen inside the Facebook or Instagram in-app browser, which
+   cannot print at all. It sits under the button rather than replacing it:
+   the button is still what she wants, once she is in a browser that prints. */
+.print-note {
+  margin: -12px 0 20px;
+  padding: 10px 14px;
+  background: var(--petal-soft);
+  border-radius: 12px;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: #7A5560;
+}
+
 /* Only ever seen on paper: says where the sheet came from, since a printed
    page has no address bar. */
 .print-only { display: none; }
@@ -2080,6 +2093,7 @@ body.panel-open {
   .modal-close,
   .recon-back,
   .print-btn,
+  .print-note,
   .ribbon-link { display: none !important; }
 
   .print-only { display: block !important; }
