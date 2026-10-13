@@ -289,9 +289,9 @@
         icsBtn.insertAdjacentElement('afterend', other);
       }
 
-      /* These feed the Google Calendar link. The same words are written into
-         /feel-it-on-the-first.ics, which the Apple option links to directly -
-         change one and change the other. */
+      /* These feed the Google Calendar link, and build-pages.py reads them
+         out of here to write /feel-it-on-the-first.ics, so the two routes
+         cannot drift apart. Rename either one and the build stops. */
       var TITLE = 'Feel It on the First';
       var DETAILS = 'Your monthly reminder to check yourself. Steps at https://foobsontheloose.com';
 

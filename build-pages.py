@@ -335,6 +335,85 @@ def write_sitemap(paths):
     print("  sitemap.xml%s%d URLs" % (" " * 26, len(paths) + 1))
 
 
+def write_reminder():
+    """feel-it-on-the-first.ics, always starting on the next 1st.
+
+    The file used to be written once by hand, so its start date sat still
+    while the calendar moved: a woman adding it in 2029 would have found four
+    years of past reminders sitting in her calendar. Writing it here means it
+    cannot go stale, because nothing on this site changes without a build.
+
+    The words come out of assets/site.js rather than being typed again. They
+    are the same words the Google Calendar link carries, and two copies of a
+    sentence drift.
+    """
+    js = open("assets/site.js", encoding="utf-8").read()
+
+    def constant(name):
+        m = re.search(r"var %s = '([^']*)';" % name, js)
+        if not m:
+            raise SystemExit("build: no %s in assets/site.js - the reminder "
+                             "takes its words from there" % name)
+        return m.group(1)
+
+    title, details = constant("TITLE"), constant("DETAILS")
+
+    today = _dt.date.today()
+    year, month = (today.year + 1, 1) if today.month == 12 else (today.year, today.month + 1)
+    start = _dt.date(year, month, 1)
+    end = start + _dt.timedelta(days=1)
+
+    # Stamped with the first of the month this was built in, rather than the
+    # moment of the build: a timestamp would rewrite the file on every run and
+    # fill the history with changes that say nothing.
+    stamp = today.replace(day=1).strftime("%Y%m%dT000000Z")
+
+    lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Foobs On the Loose//Self-exam reminder//EN",
+        "CALSCALE:GREGORIAN",
+        "X-WR-CALNAME:" + title,
+        "BEGIN:VEVENT",
+        # Fixed, so adding it twice updates the one event instead of making
+        # a second, and so a Mac subscription follows this file rather than
+        # collecting a new series every time the dates move on.
+        "UID:feel-it-on-the-first@foobsontheloose.com",
+        "DTSTAMP:" + stamp,
+        "DTSTART;VALUE=DATE:" + start.strftime("%Y%m%d"),
+        "DTEND;VALUE=DATE:" + end.strftime("%Y%m%d"),
+        "RRULE:FREQ=MONTHLY;BYMONTHDAY=1",
+        "SUMMARY:" + title,
+        "DESCRIPTION:" + details,
+        "TRANSP:TRANSPARENT",
+        "BEGIN:VALARM",
+        "ACTION:DISPLAY",
+        "DESCRIPTION:" + title,
+        "TRIGGER:PT9H",
+        "END:VALARM",
+        "END:VEVENT",
+        "END:VCALENDAR",
+    ]
+
+    # RFC 5545 counts octets, not characters, and a line over 75 of them is
+    # folded onto a continuation beginning with one space.
+    folded = []
+    for line in lines:
+        raw = line.encode("utf-8")
+        if len(raw) <= 75:
+            folded.append(line)
+            continue
+        folded.append(raw[:75].decode("utf-8"))
+        rest = raw[75:]
+        while rest:
+            folded.append(" " + rest[:74].decode("utf-8"))
+            rest = rest[74:]
+
+    with open("feel-it-on-the-first.ics", "w", encoding="utf-8", newline="") as f:
+        f.write("\r\n".join(folded) + "\r\n")
+    print("  feel-it-on-the-first.ics%s starts %s" % (" " * 13, start.isoformat()))
+
+
 def main(only=None):
     h = slurp()
     # assets/site.css is now the stylesheet itself, shared by index.html and
@@ -361,6 +440,7 @@ def main(only=None):
     # the sitemap alone rather than truncating it to one URL.
     if not only:
         write_sitemap(list(SLUGS.values()))
+        write_reminder()
 
 
 if __name__ == "__main__":
