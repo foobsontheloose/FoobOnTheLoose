@@ -219,23 +219,46 @@
       var icsBtn = document.getElementById('cal-ics');
       var gLink = document.getElementById('cal-google');
 
-      /* A phone hands the file straight to Calendar. A Mac cannot: it saves it
-         to Downloads and she has to go and find it. webcal: is not a web
-         address, so the browser passes it to the machine, which opens Calendar
-         - one click, no file. Offered only on a Mac, and only a real one:
-         an iPad calls itself a Macintosh too, and it does not need this. */
+      /* A phone hands the file straight to Calendar in one tap. A Mac cannot:
+         it saves the file to Downloads and she has to go and find it. So on a
+         Mac the option itself becomes the thing that works there - webcal: is
+         not a web address, so the browser passes it to the machine, which has
+         it bound to Calendar - and nobody has to read a word to get it.
+
+         It is Apple's calendar that answers webcal:, so the option says so
+         here, and the file moves down to the small print for anyone on a Mac
+         running Outlook or anything else. The edge case gets the line nobody
+         reads, rather than the good path.
+
+         Only a real Mac: an iPad calls itself a Macintosh too, and its one-tap
+         route already works, so no touch screen is part of the test. */
       if (icsBtn
           && /Macintosh/.test(navigator.userAgent)
           && !navigator.maxTouchPoints) {
-        var mac = document.createElement('p');
-        mac.className = 'cal-mac';
-        mac.appendChild(document.createTextNode('On a Mac this saves to Downloads. '));
-        var sub = document.createElement('a');
-        sub.href = 'webcal://foobsontheloose.com/feel-it-on-the-first.ics';
-        sub.textContent = 'Subscribe in Calendar instead';
-        mac.appendChild(sub);
-        mac.appendChild(document.createTextNode(' to skip the file.'));
-        icsBtn.insertAdjacentElement('afterend', mac);
+        var ICS_HREF = icsBtn.getAttribute('href');
+        var title = icsBtn.querySelector('.cal-opt-title');
+        var sub = icsBtn.querySelector('.cal-opt-sub');
+
+        icsBtn.href = 'webcal://foobsontheloose.com/feel-it-on-the-first.ics';
+        icsBtn.removeAttribute('download');
+        if (title) title.textContent = 'Apple Calendar';
+        if (sub) sub.textContent = 'Opens Calendar \u2014 nothing to download';
+
+        var other = document.createElement('p');
+        other.className = 'cal-mac';
+        other.appendChild(document.createTextNode('Outlook, or something else? '));
+        var file = document.createElement('a');
+        file.href = ICS_HREF;
+        file.setAttribute('download', 'feel-it-on-the-first.ics');
+        file.textContent = 'Download the calendar file';
+        other.appendChild(file);
+        other.appendChild(document.createTextNode(' instead.'));
+        icsBtn.insertAdjacentElement('afterend', other);
+
+        /* The card's footnote is about iPhones and Android phones. Neither
+           sentence is true of the machine she is sitting at. */
+        var footnote = document.querySelector('.cal-note');
+        if (footnote) footnote.hidden = true;
       }
 
       /* These feed the Google Calendar link. The same words are written into
