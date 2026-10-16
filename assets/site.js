@@ -113,20 +113,36 @@
       // whichever way it is pointing.
       var cue = document.getElementById('scroll-cue');
 
-      // Space the card reserves at its foot for the cue to rest in, which
-      // only exists while the cue does. Keep in sync with the padding-bottom
-      // on #modal > .modal-card.can-scroll.
-      var CUE_ROOM = 70;
+      // The card's own bottom padding, read while the cue is not there. The
+      // cue's padding replaces it rather than adding to it, so the room the
+      // cue actually costs is the difference between the two - and that is
+      // the only part that may be subtracted below.
+      var basePadBottom = null;
 
       function updateCue() {
         if (!cue) return;
         // Measure the content itself, not the room the cue is standing in.
         // Without this a panel that overflows by a hair gets a cue, the cue
-        // adds 68px of padding, and the panel now overflows by plenty - the
-        // cue arguing itself into existence. Subtracting the reserved space
+        // adds padding, and the panel now overflows by plenty - the cue
+        // arguing itself into existence. Subtracting the reserved space
         // means the same number is measured whether the cue is there or not,
         // so a panel that does not really need to scroll never gets one.
-        var reserved = card.classList.contains('can-scroll') ? CUE_ROOM : 0;
+        //
+        // That subtraction used to be the whole 70px, but 28px of it is the
+        // card's ordinary padding and was in the measurement already. The two
+        // states disagreed by 28px, and a panel landing in that gap flipped
+        // between them forever: Latissimus Dorsi measured 45px over without
+        // the cue - enough to earn one - and 17px over with it, not enough to
+        // keep it. On a computer it settles on the first answer. On an iPhone
+        // Safari's toolbar sends a resize every few milliseconds while it
+        // slides, so this ran again and again and the card flickered and
+        // fought the reader's thumb.
+        var padBottom = parseFloat(getComputedStyle(card).paddingBottom) || 0;
+        var hasCue = card.classList.contains('can-scroll');
+        if (!hasCue) basePadBottom = padBottom;
+        var reserved = (hasCue && basePadBottom !== null)
+          ? Math.max(0, padBottom - basePadBottom)
+          : 0;
         var scrollable = card.scrollHeight - card.clientHeight - reserved > 24;
         // A panel that is a dozen pixels too tall should not move at all.
         // It has no cue, nothing worth reading is below the fold, and all

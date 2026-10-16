@@ -573,10 +573,19 @@
     padding: 34px 24px 28px;
     width: 100%;
     max-width: 520px;
+    /* Not dvh. On an iPhone the dynamic viewport changes height as Safari's
+       toolbar hides and shows, so the card resized mid-scroll, the content
+       reflowed under her thumb and the scroll jumped - a flash, and a card
+       that would not let her back up. svh is the small viewport: the height
+       with the toolbar showing, which never moves. vh first for anything
+       that does not know svh. */
     max-height: 88vh;
-    max-height: 88dvh;
+    max-height: 88svh;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    /* -webkit-overflow-scrolling: touch was here. It is Apple's old momentum
+       flag, and in this card it sits over three sticky children - the cross,
+       the heading and the cue. That pairing flickers and jams the scroll on
+       iOS. Modern Safari gives momentum without being asked. */
     scrollbar-width: none;
     -ms-overflow-style: none;
     box-shadow: 0 24px 60px -12px rgba(60, 34, 44, 0.5);
@@ -661,7 +670,11 @@
      area without needing to know the card's size. */
   .scroll-cue {
     position: sticky;
-    top: calc(88dvh - 64px);
+    /* Same unit as the card's own max-height. With dvh here and svh there,
+       the cue drifted away from the card's foot every time Safari's toolbar
+       moved. */
+    top: calc(88vh - 64px);
+    top: calc(88svh - 64px);
     float: right;
     z-index: 3;
     margin: 0 -4px -40px 0;
